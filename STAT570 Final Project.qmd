@@ -3,8 +3,87 @@ title: "STAT570 - Final Project"
 author: "Miray Çınar"
 format: html
 editor: visual
+toc: true
+code-fold: "show"
+highlight-style: "breeze"
+eval: true
+echo: true
+theme: "lux"
 ---
 
-## Quarto
+## Introduction
 
-This is my first commit.
+\-\-\--
+
+## Data Description
+
+\-\-\--
+
+## Import the Data
+
+Let's start by importing the data. Fist, import the required libraries. If you don't already have them, you can use `install.packages()` function.
+
+```{r}
+
+library(tidyverse)
+library(readr)
+
+Uncleaned_DS_jobs <- read_csv("Uncleaned_DS_jobs.csv")
+```
+
+Let's start by investigating our dataset a little bit, by getting a glimpse and see the structure of the data:
+
+```{r}
+library(dplyr)
+glimpse(Uncleaned_DS_jobs)
+```
+
+And also take a quick summary:
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+From both `glimpse()` and `summary()` outputs, we can see that, categorical variables are in character form so we have to change them into factor variables.
+
+But first, let's change the column names that have blank spaces so that it will be much easy to make the analyses later.
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>% 
+  rename(Job_Title = `Job Title`, 
+         Salary_Estimate = `Salary Estimate`,
+         Job_Description = `Job Description`,
+         Company_Name = `Company Name`, 
+         Type_of_Ownership =  `Type of ownership`)
+```
+
+Now that we have clean names for our columns, we can transform characters into factors.
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>% 
+  mutate(Job_Title = as.factor(Job_Title),
+         Salary_Estimate = as.factor(Salary_Estimate),
+         Company_Name = as.factor(Company_Name), 
+         Location = as.factor(Location), 
+         Headquarters = as.factor(Headquarters),
+         Size = as.factor(Size), 
+         Type_of_Ownership = as.factor(Type_of_Ownership), 
+         Industry = as.factor(Industry),
+         Sector = as.factor(Sector), 
+         Revenue = as.factor(Revenue), 
+         Competitors = as.factor(Competitors)) 
+```
+
+Take a summary again to see the data:
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+From our summary, we can see some strange values are present in the data. For instance there are some rows marked as "-1" in the Headquarters, Founded, Type_of_Ownership, Industry, Sector and Competitors columns.
+
+Let's see if this are the same rows or not:
+
+```{r}
+Uncleaned_DS_jobs[Uncleaned_DS_jobs$Headquarters == '-1',]
+```
