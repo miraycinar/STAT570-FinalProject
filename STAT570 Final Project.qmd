@@ -1,0 +1,10 @@
+---
+title: "STAT570 - Final Project"
+author: "Miray Çınar"
+format: html
+editor: visual
+---
+
+## Quarto
+
+This is my first commit.
