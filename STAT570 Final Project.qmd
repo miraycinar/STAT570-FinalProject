@@ -87,3 +87,39 @@ Let's see if this are the same rows or not:
 ```{r}
 Uncleaned_DS_jobs[Uncleaned_DS_jobs$Headquarters == '-1',]
 ```
+
+We realized that from the summary function rating has a minimum value as -1 but this is not right, with the view function we see that are some -1 for the rating.
+
+```{r}
+view(Uncleaned_DS_jobs)
+
+```
+
+We need to fix that problem.
+
+To fix this, first we need to look how many data are there with rating -1
+
+```{r}
+sum(Uncleaned_DS_jobs$Rating == -1)
+```
+
+We have 50 values with ratings -1.
+
+And after looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them
+
+```{r}
+sum(Uncleaned_DS_jobs$Founded == -1)
+
+```
+
+And we can look how many rows have -1 foundation year and -1 rating
+
+```{r}
+sum(Uncleaned_DS_jobs$Founded == -1 & Uncleaned_DS_jobs$Rating == -1)
+```
+
+Foundation year and rating variable should not be -1. So firstly we can give them a NA value and we can impute them by using mean.
+
+```{r}
+
+```
