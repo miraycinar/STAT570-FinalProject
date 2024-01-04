@@ -1,6 +1,7 @@
 ---
 title: "STAT570 - Final Project"
-author: "Miray Çınar"
+subtitle: "Data Scientist Job Posting Data"
+author: "Miray Çınar & Ecenaz Tunç"
 format: html
 editor: visual
 toc: true
@@ -60,18 +61,18 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
 Now that we have clean names for our columns, we can transform characters into factors.
 
 ```{r}
-Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>% 
-  mutate(Job_Title = as.factor(Job_Title),
-         Salary_Estimate = as.factor(Salary_Estimate),
-         Company_Name = as.factor(Company_Name), 
-         Location = as.factor(Location), 
-         Headquarters = as.factor(Headquarters),
-         Size = as.factor(Size), 
-         Type_of_Ownership = as.factor(Type_of_Ownership), 
-         Industry = as.factor(Industry),
-         Sector = as.factor(Sector), 
-         Revenue = as.factor(Revenue), 
-         Competitors = as.factor(Competitors)) 
+# Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>% 
+  #mutate(Job_Title = as.factor(Job_Title),
+   #      Salary_Estimate = as.factor(Salary_Estimate),
+    #     Company_Name = as.factor(Company_Name), 
+     #    Location = as.factor(Location), 
+      #   Headquarters = as.factor(Headquarters),
+       #  Size = as.factor(Size), 
+        # Type_of_Ownership = as.factor(Type_of_Ownership), 
+         #Industry = as.factor(Industry),
+         #Sector = as.factor(Sector), 
+         #Revenue = as.factor(Revenue), 
+         #Competitors = as.factor(Competitors)) 
 ```
 
 Take a summary again to see the data:
@@ -204,3 +205,157 @@ When we look at the job description column,
 We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.
 
 To do that we can,
+
+\-\-\-\-\--
+
+## Investigating the Columns
+
+Let's investigate the columns one by one:
+
+-   Salary Estimation
+
+For Salary Estimate column, let's see the unique values we have:
+
+```{r}
+levels(as.factor(Uncleaned_DS_jobs$Salary_Estimate))
+```
+
+```{r}
+sum(is.na(as.factor(Uncleaned_DS_jobs$Salary_Estimate)))
+```
+
+From this output, we can see that we have common shape for the salary estimates with 0 NA values. We can separate this column into two separate columns for obtaining lower and upper limits for the salary estimates.
+
+```{r}
+# Remove spaces in the column 
+Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- Uncleaned_DS_jobs$Salary_Estimate
+
+Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- gsub(" ", "",Uncleaned_DS_jobs$Salary_Estimate)  
+# Display the updated dataframe 
+head(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces) 
+```
+
+Now we have no blank space between the words.
+
+```{r}
+## str_view(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces, "[a-z0-9]+")
+```
+
+Let's get rid of the parts at the end; Glassdor est. and Employer est.
+
+```{r}
+Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- gsub("K\\(Glassdoorest.\\)","",Uncleaned_DS_jobs$Salary_Estimate_wo_spaces) 
+
+head(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces)
+```
+
+```{r}
+Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- gsub("K\\(Employerest.\\)","",Uncleaned_DS_jobs$Salary_Estimate_wo_spaces)
+```
+
+Let's see how we can select the numbers that are remaining in the rows: we can use \[0-9\]+ for this part:
+
+```{r}
+str_view(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces, "[0-9]+")
+```
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs |>    
+  separate_wider_regex(     
+    Salary_Estimate_wo_spaces,     
+    patterns = c(
+      "\\$",
+      Low_Limit_For_Salary = "[0-9]+",       
+      "K-\\$",       
+      High_Limit_For_Salary = "[0-9]+"  
+      )   
+    ) 
+```
+
+By using `separate_wider_regex()` function, we defined the pattern in the data, and we got the new columns as Low_Limit_For_Salary and High_Limit_For_Salary as we wished.
+
+```{r}
+head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
+```
+
+For not confusing the numbers later, lets multiply the low limit and high limit numbers with 1000.
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%  
+  mutate(Low_Limit_For_Salary = as.numeric(Low_Limit_For_Salary)*1000,
+         High_Limit_For_Salary = as.numeric(High_Limit_For_Salary)*1000)
+```
+
+```{r}
+head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
+```
+
+-   Job Title
+
+For Job Title column, first let's examine it:
+
+```{r}
+glimpse(as.factor(Uncleaned_DS_jobs$Job_Title))
+```
+
+As we can see, we have 172 different levels for Job Titles. We can try to group them by searching common words.
+
+```{r}
+head(levels(as.factor(Uncleaned_DS_jobs$Job_Title)))
+```
+
+But before that, we can see that some columns have "Senior", "Manager" words. By using this information, we can create a new column for seniority of the job.
+
+```{r}
+str_view(Uncleaned_DS_jobs$Job_Title, regex("^Senior", multiline = TRUE))
+```
+
+```{r}
+str_view(Uncleaned_DS_jobs$Job_Title, regex("^Data Scientist", multiline = TRUE))
+```
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <-  str_replace_all(Uncleaned_DS_jobs$Job_Title,".*Data\\s+Scientist.*","Data Scientist")
+```
+
+```{r}
+glimpse(as.factor(Uncleaned_DS_jobs$Job_Title))
+```
+
+Now let's get Data Analyst titles:
+
+```{r}
+str_view(Uncleaned_DS_jobs$Job_Title, regex("^Data Analyst", multiline = TRUE))
+```
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <-  str_replace_all(Uncleaned_DS_jobs$Job_Title,".*Data\\s+Analyst.*","Data Analyst")
+```
+
+```{r}
+glimpse(as.factor(Uncleaned_DS_jobs$Job_Title))
+```
+
+Now let's get Data Engineer titles:
+
+```{r}
+str_view(Uncleaned_DS_jobs$Job_Title, regex("^Data Engineer", multiline = TRUE))
+```
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <-  str_replace_all(Uncleaned_DS_jobs$Job_Title,".*Data\\s+Engineer.*","Data Engineer")
+```
+
+And Machine Learning Engineers:
+
+```{r}
+str_view(Uncleaned_DS_jobs$Job_Title, regex("^Machine Learning", multiline = TRUE))
+```
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <-  str_replace_all(Uncleaned_DS_jobs$Job_Title,".*Machine\\s+Learning.*","Machine Learning Engineer")
+```
+
+```{r}
+levels(as.factor(Uncleaned_DS_jobs$Job_Title))
+```

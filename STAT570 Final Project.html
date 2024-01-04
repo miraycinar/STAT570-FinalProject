@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Miray Çınar">
+<meta name="author" content="Miray Çınar &amp; Ecenaz Tunç">
 
 <title>STAT570 - Final Project</title>
 <style>
@@ -83,6 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data Description</a></li>
   <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
+  <li><a href="#investigating-the-columns" id="toc-investigating-the-columns" class="nav-link" data-scroll-target="#investigating-the-columns">Investigating the Columns</a></li>
   </ul>
 </nav>
 </div>
@@ -91,6 +92,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">STAT570 - Final Project</h1>
+<p class="subtitle lead">Data Scientist Job Posting Data</p>
 </div>
 
 
@@ -100,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Miray Çınar </p>
+             <p>Miray Çınar &amp; Ecenaz Tunç </p>
           </div>
   </div>
     
@@ -237,18 +239,18 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Job_Title =</span> <span class="fu">as.factor</span>(Job_Title),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Salary_Estimate =</span> <span class="fu">as.factor</span>(Salary_Estimate),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Company_Name =</span> <span class="fu">as.factor</span>(Company_Name), </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Location =</span> <span class="fu">as.factor</span>(Location), </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Headquarters =</span> <span class="fu">as.factor</span>(Headquarters),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">Size =</span> <span class="fu">as.factor</span>(Size), </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">Type_of_Ownership =</span> <span class="fu">as.factor</span>(Type_of_Ownership), </span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">Industry =</span> <span class="fu">as.factor</span>(Industry),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">Sector =</span> <span class="fu">as.factor</span>(Sector), </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">Revenue =</span> <span class="fu">as.factor</span>(Revenue), </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">Competitors =</span> <span class="fu">as.factor</span>(Competitors)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncleaned_DS_jobs &lt;- Uncleaned_DS_jobs %&gt;% </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mutate(Job_Title = as.factor(Job_Title),</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>   <span class="co">#      Salary_Estimate = as.factor(Salary_Estimate),</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     Company_Name = as.factor(Company_Name), </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="co">#    Location = as.factor(Location), </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      <span class="co">#   Headquarters = as.factor(Headquarters),</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>       <span class="co">#  Size = as.factor(Size), </span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Type_of_Ownership = as.factor(Type_of_Ownership), </span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="co">#Industry = as.factor(Industry),</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="co">#Sector = as.factor(Sector), </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         <span class="co">#Revenue = as.factor(Revenue), </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         <span class="co">#Competitors = as.factor(Competitors)) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Take a summary again to see the data:</p>
@@ -258,70 +260,34 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>     index                           Job_Title  
- Min.   :  0.0   Data Scientist           :337  
- 1st Qu.:167.8   Data Engineer            : 26  
- Median :335.5   Senior Data Scientist    : 19  
- Mean   :335.5   Machine Learning Engineer: 16  
- 3rd Qu.:503.2   Data Analyst             : 12  
- Max.   :671.0   Senior Data Analyst      :  6  
-                 (Other)                  :256  
-                     Salary_Estimate Job_Description        Rating      
- $75K-$131K (Glassdoor est.) : 32    Length:672         Min.   :-1.000  
- $79K-$131K (Glassdoor est.) : 32    Class :character   1st Qu.: 3.300  
- $99K-$132K (Glassdoor est.) : 32    Mode  :character   Median : 3.800  
- $137K-$171K (Glassdoor est.): 30                       Mean   : 3.519  
- $90K-$109K (Glassdoor est.) : 30                       3rd Qu.: 4.300  
- $56K-$97K (Glassdoor est.)  : 22                       Max.   : 5.000  
- (Other)                     :494                                       
-                  Company_Name              Location              Headquarters
- Hatch Data Inc         : 12   San Francisco, CA: 69   New York, NY     : 33  
- Maxar Technologies\n3.5: 12   New York, NY     : 50   -1               : 31  
- Tempus Labs\n3.3       : 11   Washington, DC   : 26   San Francisco, CA: 31  
- AstraZeneca\n4.0       : 10   Boston, MA       : 24   Chicago, IL      : 23  
- Klaviyo\n4.8           :  8   Chicago, IL      : 22   Boston, MA       : 19  
- Autodesk\n4.0          :  7   Herndon, VA      : 21   Reston, VA       : 14  
- (Other)                :612   (Other)          :460   (Other)          :521  
-                     Size        Founded    
- 51 to 200 employees   :135   Min.   :  -1  
- 1001 to 5000 employees:104   1st Qu.:1918  
- 1 to 50 employees     : 86   Median :1995  
- 201 to 500 employees  : 85   Mean   :1636  
- 10000+ employees      : 80   3rd Qu.:2009  
- 501 to 1000 employees : 77   Max.   :2019  
- (Other)               :105                 
-                      Type_of_Ownership
- Company - Private             :397    
- Company - Public              :153    
- Nonprofit Organization        : 36    
- Subsidiary or Business Segment: 28    
- -1                            : 27    
- Government                    : 10    
- (Other)                       : 21    
-                                    Industry                         Sector   
- -1                                     : 71   Information Technology   :188  
- Biotech &amp; Pharmaceuticals              : 66   Business Services        :120  
- IT Services                            : 61   -1                       : 71  
- Computer Hardware &amp; Software           : 57   Biotech &amp; Pharmaceuticals: 66  
- Aerospace &amp; Defense                    : 46   Aerospace &amp; Defense      : 46  
- Enterprise Software &amp; Network Solutions: 43   Finance                  : 33  
- (Other)                                :328   (Other)                  :148  
-                       Revenue   
- Unknown / Non-Applicable  :213  
- $100 to $500 million (USD): 94  
- $10+ billion (USD)        : 63  
- $2 to $5 billion (USD)    : 45  
- $10 to $25 million (USD)  : 41  
- $1 to $2 billion (USD)    : 36  
- (Other)                   :180  
-                                                      Competitors 
- -1                                                         :501  
- Roche, GlaxoSmithKline, Novartis                           : 10  
- Leidos, CACI International, Booz Allen Hamilton            :  6  
- Los Alamos National Laboratory, Battelle, SRI International:  6  
- Battelle, General Atomics, SAIC                            :  3  
- Commerce Signals, Cardlytics, Yodlee                       :  3  
- (Other)                                                    :143  </code></pre>
+<pre><code>     index        Job_Title         Salary_Estimate    Job_Description   
+ Min.   :  0.0   Length:672         Length:672         Length:672        
+ 1st Qu.:167.8   Class :character   Class :character   Class :character  
+ Median :335.5   Mode  :character   Mode  :character   Mode  :character  
+ Mean   :335.5                                                           
+ 3rd Qu.:503.2                                                           
+ Max.   :671.0                                                           
+     Rating       Company_Name         Location         Headquarters      
+ Min.   :-1.000   Length:672         Length:672         Length:672        
+ 1st Qu.: 3.300   Class :character   Class :character   Class :character  
+ Median : 3.800   Mode  :character   Mode  :character   Mode  :character  
+ Mean   : 3.519                                                           
+ 3rd Qu.: 4.300                                                           
+ Max.   : 5.000                                                           
+     Size              Founded     Type_of_Ownership    Industry        
+ Length:672         Min.   :  -1   Length:672         Length:672        
+ Class :character   1st Qu.:1918   Class :character   Class :character  
+ Mode  :character   Median :1995   Mode  :character   Mode  :character  
+                    Mean   :1636                                        
+                    3rd Qu.:2009                                        
+                    Max.   :2019                                        
+    Sector            Revenue          Competitors       
+ Length:672         Length:672         Length:672        
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
 </div>
 </div>
 <p>From our summary, we can see some strange values are present in the data. For instance there are some rows marked as “-1” in the Headquarters, Founded, Type_of_Ownership, Industry, Sector and Competitors columns.</p>
@@ -334,7 +300,7 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 31 × 15
    index Job_Title  Salary_Estimate Job_Description Rating Company_Name Location
-   &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt;           &lt;chr&gt;            &lt;dbl&gt; &lt;fct&gt;        &lt;fct&gt;   
+   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;   
  1   154 ELISA RES… $90K-$109K (Gl… "Covaxx, a sub…     -1 "Covid-19 S… Hauppau…
  2   158 Machine L… $101K-$165K (G… "Overview\n\nR…     -1 "Radical Co… Reston,…
  3   258 Data Scie… $90K-$124K (Gl… "Full Time Dat…      5 "The Drive … New Yor…
@@ -346,9 +312,627 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
  9   361 Data Scie… $122K-$146K (G… "Job Overview:…     -1 "Hatch Data… San Fra…
 10   362 Data Scie… $122K-$146K (G… "Job Overview:…     -1 "Hatch Data… San Fra…
 # ℹ 21 more rows
-# ℹ 8 more variables: Headquarters &lt;fct&gt;, Size &lt;fct&gt;, Founded &lt;dbl&gt;,
-#   Type_of_Ownership &lt;fct&gt;, Industry &lt;fct&gt;, Sector &lt;fct&gt;, Revenue &lt;fct&gt;,
-#   Competitors &lt;fct&gt;</code></pre>
+# ℹ 8 more variables: Headquarters &lt;chr&gt;, Size &lt;chr&gt;, Founded &lt;dbl&gt;,
+#   Type_of_Ownership &lt;chr&gt;, Industry &lt;chr&gt;, Sector &lt;chr&gt;, Revenue &lt;chr&gt;,
+#   Competitors &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>We realized that from the summary function rating has a minimum value as -1 but this is not right, with the view function we see that are some -1 for the rating.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(Uncleaned_DS_jobs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We need to fix that problem.</p>
+<p>To fix this, first we need to look how many data are there with rating -1</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Rating <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50</code></pre>
+</div>
+</div>
+<p>We have 50 values with ratings -1.</p>
+<p>And after looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Founded <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 118</code></pre>
+</div>
+</div>
+<p>And we can look how many rows have -1 foundation year and -1 rating</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Founded <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">&amp;</span> Uncleaned_DS_jobs<span class="sc">$</span>Rating <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49</code></pre>
+</div>
+</div>
+<p>Foundation year and rating variable should not be -1. So firstly we can give them a NA value and we can impute them by using mean.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Rating[Uncleaned_DS_jobs<span class="sc">$</span>Rating <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Founded[Uncleaned_DS_jobs<span class="sc">$</span>Founded <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we can use mean imputation method</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rating_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(Uncleaned_DS_jobs<span class="sc">$</span>Rating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Rating[<span class="fu">is.na</span>(Uncleaned_DS_jobs<span class="sc">$</span>Rating)] <span class="ot">&lt;-</span> rating_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now lets check if it worked,</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs<span class="sc">$</span>Rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  2.000   3.500   3.882   3.882   4.300   5.000 </code></pre>
+</div>
+</div>
+<p>As can be seen from the summary of the rating we fix the -1 problem.</p>
+<p>And we can do this same process the founded variable</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>founded_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(Uncleaned_DS_jobs<span class="sc">$</span>Founded, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Founded[<span class="fu">is.na</span>(Uncleaned_DS_jobs<span class="sc">$</span>Founded)] <span class="ot">&lt;-</span> founded_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs<span class="sc">$</span>Founded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1781    1983    1995    1984    2009    2019 </code></pre>
+</div>
+</div>
+<p>From the summary we also fix the problem for founded.</p>
+<p>As can be seen from the summary that we have -1 for the size. But we have unknown category for this variable.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs<span class="sc">$</span>Size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Length     Class      Mode 
+      672 character character </code></pre>
+</div>
+</div>
+<p>So we can assign -1 to unknown category for this variable</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Size[Uncleaned_DS_jobs<span class="sc">$</span>Size <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"Unknown"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs<span class="sc">$</span>Size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Length     Class      Mode 
+      672 character character </code></pre>
+</div>
+</div>
+<p>There are -1 values in competitors. We don’t know their competitors’ name so we can attribute them to no information</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Competitors <span class="ot">&lt;-</span> <span class="fu">as.character</span>(Uncleaned_DS_jobs<span class="sc">$</span>Competitors)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Competitors[Uncleaned_DS_jobs<span class="sc">$</span>Competitors <span class="sc">==</span> <span class="st">"-1"</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Uncleaned_DS_jobs<span class="sc">$</span>Competitors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Length     Class      Mode 
+      672 character character </code></pre>
+</div>
+</div>
+<p>For the headquarters we have -1 values also,</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Headquarters <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Headquarters<span class="ot">&lt;-</span> <span class="fu">as.character</span>(Uncleaned_DS_jobs<span class="sc">$</span>Headquarters)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Headquarters[Uncleaned_DS_jobs<span class="sc">$</span>Headquarters <span class="sc">==</span> <span class="st">"-1"</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>When we look at the job description column,</p>
+<p>We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.</p>
+<p>To do that we can,</p>
+<p>------</p>
+</section>
+<section id="investigating-the-columns" class="level2">
+<h2 class="anchored" data-anchor-id="investigating-the-columns">Investigating the Columns</h2>
+<p>Let’s investigate the columns one by one:</p>
+<ul>
+<li>Salary Estimation</li>
+</ul>
+<p>For Salary Estimate column, let’s see the unique values we have:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "$101K-$165K (Glassdoor est.)" "$105K-$167K (Glassdoor est.)"
+ [3] "$110K-$163K (Glassdoor est.)" "$112K-$116K (Glassdoor est.)"
+ [5] "$122K-$146K (Glassdoor est.)" "$124K-$198K (Glassdoor est.)"
+ [7] "$128K-$201K (Glassdoor est.)" "$137K-$171K (Glassdoor est.)"
+ [9] "$138K-$158K (Glassdoor est.)" "$141K-$225K (Glassdoor est.)"
+[11] "$145K-$225K(Employer est.)"   "$212K-$331K (Glassdoor est.)"
+[13] "$31K-$56K (Glassdoor est.)"   "$56K-$97K (Glassdoor est.)"  
+[15] "$66K-$112K (Glassdoor est.)"  "$69K-$116K (Glassdoor est.)" 
+[17] "$71K-$123K (Glassdoor est.)"  "$75K-$131K (Glassdoor est.)" 
+[19] "$79K-$106K (Glassdoor est.)"  "$79K-$131K (Glassdoor est.)" 
+[21] "$79K-$133K (Glassdoor est.)"  "$79K-$147K (Glassdoor est.)" 
+[23] "$80K-$132K (Glassdoor est.)"  "$87K-$141K (Glassdoor est.)" 
+[25] "$90K-$109K (Glassdoor est.)"  "$90K-$124K (Glassdoor est.)" 
+[27] "$91K-$150K (Glassdoor est.)"  "$92K-$155K (Glassdoor est.)" 
+[29] "$95K-$119K (Glassdoor est.)"  "$99K-$132K (Glassdoor est.)" </code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>From this output, we can see that we have common shape for the salary estimates with 0 NA values. We can separate this column into two separate columns for obtaining lower and upper limits for the salary estimates.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove spaces in the column </span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">" "</span>, <span class="st">""</span>,Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate)  </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the updated dataframe </span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "$137K-$171K(Glassdoorest.)" "$137K-$171K(Glassdoorest.)"
+[3] "$137K-$171K(Glassdoorest.)" "$137K-$171K(Glassdoorest.)"
+[5] "$137K-$171K(Glassdoorest.)" "$137K-$171K(Glassdoorest.)"</code></pre>
+</div>
+</div>
+<p>Now we have no blank space between the words.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## str_view(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces, "[a-z0-9]+")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s get rid of the parts at the end; Glassdor est. and Employer est.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Glassdoorest.</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces) </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "$137K-$171" "$137K-$171" "$137K-$171" "$137K-$171" "$137K-$171"
+[6] "$137K-$171"</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Employerest.</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s see how we can select the numbers that are remaining in the rows: we can use [0-9]+ for this part:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces, <span class="st">"[0-9]+"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] │ $&lt;137&gt;K-$&lt;171&gt;
+ [2] │ $&lt;137&gt;K-$&lt;171&gt;
+ [3] │ $&lt;137&gt;K-$&lt;171&gt;
+ [4] │ $&lt;137&gt;K-$&lt;171&gt;
+ [5] │ $&lt;137&gt;K-$&lt;171&gt;
+ [6] │ $&lt;137&gt;K-$&lt;171&gt;
+ [7] │ $&lt;137&gt;K-$&lt;171&gt;
+ [8] │ $&lt;137&gt;K-$&lt;171&gt;
+ [9] │ $&lt;137&gt;K-$&lt;171&gt;
+[10] │ $&lt;137&gt;K-$&lt;171&gt;
+[11] │ $&lt;137&gt;K-$&lt;171&gt;
+[12] │ $&lt;137&gt;K-$&lt;171&gt;
+[13] │ $&lt;137&gt;K-$&lt;171&gt;
+[14] │ $&lt;137&gt;K-$&lt;171&gt;
+[15] │ $&lt;137&gt;K-$&lt;171&gt;
+[16] │ $&lt;137&gt;K-$&lt;171&gt;
+[17] │ $&lt;137&gt;K-$&lt;171&gt;
+[18] │ $&lt;137&gt;K-$&lt;171&gt;
+[19] │ $&lt;137&gt;K-$&lt;171&gt;
+[20] │ $&lt;137&gt;K-$&lt;171&gt;
+... and 652 more</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">|&gt;</span>    </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(     </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    Salary_Estimate_wo_spaces,     </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns =</span> <span class="fu">c</span>(</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\\</span><span class="st">$"</span>,</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">Low_Limit_For_Salary =</span> <span class="st">"[0-9]+"</span>,       </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"K-</span><span class="sc">\\</span><span class="st">$"</span>,       </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">High_Limit_For_Salary =</span> <span class="st">"[0-9]+"</span>  </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>      )   </span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>By using <code>separate_wider_regex()</code> function, we defined the pattern in the data, and we got the new columns as Low_Limit_For_Salary and High_Limit_For_Salary as we wished.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs[<span class="fu">c</span>(<span class="st">"Salary_Estimate"</span>,<span class="st">"Low_Limit_For_Salary"</span>, <span class="st">"High_Limit_For_Salary"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Salary_Estimate              Low_Limit_For_Salary High_Limit_For_Salary
+  &lt;chr&gt;                        &lt;chr&gt;                &lt;chr&gt;                
+1 $137K-$171K (Glassdoor est.) 137                  171                  
+2 $137K-$171K (Glassdoor est.) 137                  171                  
+3 $137K-$171K (Glassdoor est.) 137                  171                  
+4 $137K-$171K (Glassdoor est.) 137                  171                  
+5 $137K-$171K (Glassdoor est.) 137                  171                  
+6 $137K-$171K (Glassdoor est.) 137                  171                  </code></pre>
+</div>
+</div>
+<p>For not confusing the numbers later, lets multiply the low limit and high limit numbers with 1000.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span>  </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Low_Limit_For_Salary =</span> <span class="fu">as.numeric</span>(Low_Limit_For_Salary)<span class="sc">*</span><span class="dv">1000</span>,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">High_Limit_For_Salary =</span> <span class="fu">as.numeric</span>(High_Limit_For_Salary)<span class="sc">*</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs[<span class="fu">c</span>(<span class="st">"Salary_Estimate"</span>,<span class="st">"Low_Limit_For_Salary"</span>, <span class="st">"High_Limit_For_Salary"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Salary_Estimate              Low_Limit_For_Salary High_Limit_For_Salary
+  &lt;chr&gt;                                       &lt;dbl&gt;                 &lt;dbl&gt;
+1 $137K-$171K (Glassdoor est.)               137000                171000
+2 $137K-$171K (Glassdoor est.)               137000                171000
+3 $137K-$171K (Glassdoor est.)               137000                171000
+4 $137K-$171K (Glassdoor est.)               137000                171000
+5 $137K-$171K (Glassdoor est.)               137000                171000
+6 $137K-$171K (Glassdoor est.)               137000                171000</code></pre>
+</div>
+</div>
+<ul>
+<li>Job Title</li>
+</ul>
+<p>For Job Title column, first let’s examine it:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Factor w/ 172 levels "(Sr.) Data Scientist -",..: 156 50 50 50 50 50 65 50 165 50 ...</code></pre>
+</div>
+</div>
+<p>As we can see, we have 172 different levels for Job Titles. We can try to group them by searching common words.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">levels</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "(Sr.) Data Scientist -"                                
+[2] "AI Data Scientist"                                     
+[3] "AI Ops Data Scientist"                                 
+[4] "AI/ML - Machine Learning Scientist, Siri Understanding"
+[5] "Analytics - Business Assurance Data Analyst"           
+[6] "Analytics Manager"                                     </code></pre>
+</div>
+</div>
+<p>But before that, we can see that some columns have “Senior”, “Manager” words. By using this information, we can create a new column for seniority of the job.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Senior"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [34] │ &lt;Senior&gt; Research Statistician- Data Scientist
+ [40] │ &lt;Senior&gt; Analyst/Data Scientist
+ [47] │ &lt;Senior&gt; Data Scientist
+ [57] │ &lt;Senior&gt; Data Scientist
+ [93] │ &lt;Senior&gt; Data Scientist
+ [99] │ &lt;Senior&gt; Data Scientist
+[104] │ &lt;Senior&gt; Data Scientist
+[122] │ &lt;Senior&gt; Data Engineer
+[123] │ &lt;Senior&gt; Data Scientist
+[132] │ &lt;Senior&gt; Data Engineer
+[137] │ &lt;Senior&gt; Data Engineer
+[143] │ &lt;Senior&gt; Data Scientist
+[167] │ &lt;Senior&gt; Data Analyst
+[168] │ &lt;Senior&gt; Data Analyst
+[174] │ &lt;Senior&gt; Data Scientist - Algorithms
+[176] │ &lt;Senior&gt; Data &amp; Machine Learning Scientist
+[185] │ &lt;Senior&gt; Data Analyst
+[195] │ &lt;Senior&gt; Data Scientist - R&amp;D Oncology
+[205] │ &lt;Senior&gt; Data Scientist – Image Analytics, Novartis AI Innovation Lab
+[208] │ &lt;Senior&gt; Business Intelligence Analyst
+... and 35 more</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Scientist"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [2] │ &lt;Data Scientist&gt;
+ [3] │ &lt;Data Scientist&gt;
+ [4] │ &lt;Data Scientist&gt;
+ [5] │ &lt;Data Scientist&gt;
+ [6] │ &lt;Data Scientist&gt;
+ [7] │ &lt;Data Scientist&gt; / Machine Learning Expert
+ [8] │ &lt;Data Scientist&gt;
+[10] │ &lt;Data Scientist&gt;
+[11] │ &lt;Data Scientist&gt;
+[12] │ &lt;Data Scientist&gt;
+[13] │ &lt;Data Scientist&gt; - Statistics, Early Career
+[15] │ &lt;Data Scientist&gt;
+[17] │ &lt;Data Scientist&gt; - Contract
+[18] │ &lt;Data Scientist&gt;
+[21] │ &lt;Data Scientist&gt;
+[22] │ &lt;Data Scientist&gt;/Machine Learning
+[25] │ &lt;Data Scientist&gt;
+[26] │ &lt;Data Scientist&gt;
+[27] │ &lt;Data Scientist&gt; - Risk
+[28] │ &lt;Data Scientist&gt;-Human Resources
+... and 360 more</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Scientist.*"</span>,<span class="st">"Data Scientist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Factor w/ 116 levels "AI/ML - Machine Learning Scientist, Siri Understanding",..: 44 44 44 44 44 44 44 44 44 44 ...</code></pre>
+</div>
+</div>
+<p>Now let’s get Data Analyst titles:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Analyst"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [19] │ &lt;Data Analyst&gt; II
+ [41] │ &lt;Data Analyst&gt;
+ [43] │ &lt;Data Analyst&gt; I
+ [51] │ &lt;Data Analyst&gt;
+ [61] │ &lt;Data Analyst&gt;
+ [76] │ &lt;Data Analyst&gt;
+ [87] │ &lt;Data Analyst&gt;
+[112] │ &lt;Data Analyst&gt;
+[118] │ &lt;Data Analyst&gt;/Engineer
+[139] │ &lt;Data Analyst&gt;
+[164] │ &lt;Data Analyst&gt;
+[175] │ &lt;Data Analyst&gt;
+[298] │ &lt;Data Analyst&gt;
+[341] │ &lt;Data Analyst&gt; - Unilever Prestige
+[357] │ &lt;Data Analyst&gt;
+[464] │ &lt;Data Analyst&gt; - Unilever Prestige
+[492] │ &lt;Data Analyst&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Analyst.*"</span>,<span class="st">"Data Analyst"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Factor w/ 93 levels "AI/ML - Machine Learning Scientist, Siri Understanding",..: 37 37 37 37 37 37 37 37 37 37 ...</code></pre>
+</div>
+</div>
+<p>Now let’s get Data Engineer titles:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Engineer"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [35] │ &lt;Data Engineer&gt;
+ [66] │ &lt;Data Engineer&gt;
+ [71] │ &lt;Data Engineer&gt; (Remote)
+ [77] │ &lt;Data Engineer&gt;, Enterprise Analytics
+ [83] │ &lt;Data Engineer&gt;
+[108] │ &lt;Data Engineer&gt;
+[114] │ &lt;Data Engineer&gt;
+[120] │ &lt;Data Engineer&gt;
+[124] │ &lt;Data Engineer&gt;
+[129] │ &lt;Data Engineer&gt;
+[133] │ &lt;Data Engineer&gt;
+[140] │ &lt;Data Engineer&gt;
+[153] │ &lt;Data Engineer&gt;
+[169] │ &lt;Data Engineer&gt;
+[177] │ &lt;Data Engineer&gt;
+[192] │ &lt;Data Engineer&gt;
+[204] │ &lt;Data Engineer&gt;
+[206] │ &lt;Data Engineer&gt;
+[224] │ &lt;Data Engineer&gt;
+[270] │ &lt;Data Engineer&gt;, Digital &amp; Comp Pathology
+... and 13 more</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Engineer.*"</span>,<span class="st">"Data Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>And Machine Learning Engineers:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Machine Learning"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [42] │ &lt;Machine Learning&gt; Engineer
+ [62] │ &lt;Machine Learning&gt; Engineer
+ [89] │ &lt;Machine Learning&gt; Engineer
+ [92] │ &lt;Machine Learning&gt; Engineer
+[102] │ &lt;Machine Learning&gt; Engineer
+[135] │ &lt;Machine Learning&gt; Engineer
+[136] │ &lt;Machine Learning&gt; Engineer
+[145] │ &lt;Machine Learning&gt; Engineer
+[159] │ &lt;Machine Learning&gt; Engineer
+[172] │ &lt;Machine Learning&gt; Scientist - Bay Area, CA
+[180] │ &lt;Machine Learning&gt; Engineer
+[203] │ &lt;Machine Learning&gt; Engineer
+[229] │ &lt;Machine Learning&gt; Engineer
+[331] │ &lt;Machine Learning&gt; Engineer
+[333] │ &lt;Machine Learning&gt; Engineer/Scientist
+[340] │ &lt;Machine Learning&gt; Engineer
+[446] │ &lt;Machine Learning&gt; Engineer/Scientist
+[459] │ &lt;Machine Learning&gt; Engineer
+[536] │ &lt;Machine Learning&gt; Scientist / Engineer
+[568] │ &lt;Machine Learning&gt; Engineer
+... and 1 more</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Machine</span><span class="sc">\\</span><span class="st">s+Learning.*"</span>,<span class="st">"Machine Learning Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Analytics Manager"                                                                               
+ [2] "Analytics Manager - Data Mart"                                                                   
+ [3] "Applied AI Scientist / Engineer"                                                                 
+ [4] "Applied Computer Scientist"                                                                      
+ [5] "Business Intelligence Analyst"                                                                   
+ [6] "Business Intelligence Analyst I- Data Insights"                                                  
+ [7] "Chief Scientist"                                                                                 
+ [8] "Computational Behavioral Scientist"                                                              
+ [9] "Computational Scientist"                                                                         
+[10] "COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING"                 
+[11] "COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - TRANSPORTATION TECHNOLOGY"         
+[12] "Computer Scientist 1"                                                                            
+[13] "Computer Vision / Deep Learning Scientist"                                                       
+[14] "Data Analyst"                                                                                    
+[15] "Data Analytics Engineer"                                                                         
+[16] "Data Architect"                                                                                  
+[17] "Data Engineer"                                                                                   
+[18] "Data Integration and Modeling Engineer"                                                          
+[19] "Data Modeler"                                                                                    
+[20] "Data Modeler (Analytical Systems)"                                                               
+[21] "Data Science Analyst"                                                                            
+[22] "Data Science Instructor"                                                                         
+[23] "Data Science Manager"                                                                            
+[24] "Data Science Manager, Payment Acceptance - USA"                                                  
+[25] "Data Science Software Engineer"                                                                  
+[26] "Data Scientist"                                                                                  
+[27] "Data Solutions Engineer - Data Modeler"                                                          
+[28] "Decision Scientist"                                                                              
+[29] "Developer III - Data Science"                                                                    
+[30] "Development Scientist, Voltaren"                                                                 
+[31] "Director of Data Science"                                                                        
+[32] "ELISA RESEARCH SCIENTIST (CV-15)"                                                                
+[33] "ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR"
+[34] "Environmental Data Science"                                                                      
+[35] "Equity Data Insights Analyst - Quantitative Analyst"                                             
+[36] "Human Factors Scientist"                                                                         
+[37] "Hydrogen/Tritium Materials Scientist (Experienced)"                                              
+[38] "Information Systems Engineering Specialist (Engineering Scientist)"                              
+[39] "IT Partner Digital Health Technology and Data Science"                                           
+[40] "Lead Certified Clinical Laboratory Scientist - Saturday - Tuesday, 8:00pm - 6:30am shift"        
+[41] "Machine Learning Engineer"                                                                       
+[42] "Manager / Lead, Data Science &amp; Analytics"                                                        
+[43] "Manager, Field Application Scientist, Southeast"                                                 
+[44] "Medical Lab Scientist"                                                                           
+[45] "NGS Scientist"                                                                                   
+[46] "Principal Data &amp; Analytics Platform Engineer"                                                    
+[47] "Principal Scientist/Associate Director, Quality Control and Analytical Technologies"             
+[48] "Production Engineer - Statistics/Data Analysis"                                                  
+[49] "Purification Scientist"                                                                          
+[50] "Real World Evidence (RWE) Scientist"                                                             
+[51] "Research Scientist - Patient-Centered Research (Remote)"                                         
+[52] "Research Scientist Patient Preferences (Remote)"                                                 
+[53] "Scientist - Biomarker and Flow Cytometry"                                                        
+[54] "Scientist - Molecular Biology"                                                                   
+[55] "Scientist / Group Lead, Cancer Biology"                                                          
+[56] "Scientist/Research Associate-Metabolic Engineering"                                              
+[57] "Senior Business Intelligence Analyst"                                                            
+[58] "Senior Scientist - Toxicologist - Product Integrity (Stewardship)"                               
+[59] "Software Engineer - Data Science"                                                                
+[60] "Sr Scientist - Extractables &amp; Leachables"                                                        
+[61] "Sr. Research Associate/ Scientist, NGS prep &amp; Molecular Genomics"                                
+[62] "Staff Scientist- Upstream PD"                                                                    
+[63] "Statistical Scientist"                                                                           
+[64] "Vice President, Biometrics and Clinical Data Management"                                         
+[65] "VP, Data Science"                                                                                
+[66] "Weapons and Sensors Engineer/Scientist"                                                          </code></pre>
 </div>
 </div>
 </section>
