@@ -126,3 +126,81 @@ Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- NA
 Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- NA
 
 ```
+
+Now we can use mean imputation method
+
+```{r}
+rating_mean <- mean(Uncleaned_DS_jobs$Rating, na.rm = TRUE)
+Uncleaned_DS_jobs$Rating[is.na(Uncleaned_DS_jobs$Rating)] <- rating_mean
+```
+
+Now lets check if it worked,
+
+```{r}
+summary(Uncleaned_DS_jobs$Rating)
+```
+
+As can be seen from the summary of the rating we fix the -1 problem.
+
+And we can do this same process the founded variable
+
+```{r}
+founded_mean <- mean(Uncleaned_DS_jobs$Founded, na.rm = TRUE)
+Uncleaned_DS_jobs$Founded[is.na(Uncleaned_DS_jobs$Founded)] <- founded_mean
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$Founded)
+```
+
+From the summary we also fix the problem for founded.
+
+As can be seen from the summary that we have -1 for the size. But we have unknown category for this variable.
+
+```{r}
+summary(Uncleaned_DS_jobs$Size)
+```
+
+So we can assign -1 to unknown category for this variable
+
+```{r}
+Uncleaned_DS_jobs$Size[Uncleaned_DS_jobs$Size == -1] <- "Unknown"
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$Size)
+```
+
+There are -1 values in competitors. We don't know their competitors' name so we can attribute them to no information
+
+```{r}
+Uncleaned_DS_jobs$Competitors <- as.character(Uncleaned_DS_jobs$Competitors)
+
+
+Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Competitors == "-1"] <- "No information"
+
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$Competitors)
+```
+
+For the headquarters we have -1 values also,
+
+```{r}
+sum(Uncleaned_DS_jobs$Headquarters == -1)
+
+```
+
+```{r}
+Uncleaned_DS_jobs$Headquarters<- as.character(Uncleaned_DS_jobs$Headquarters)
+
+
+Uncleaned_DS_jobs$Headquarters[Uncleaned_DS_jobs$Headquarters == "-1"] <- "No information"
+```
+
+When we look at the job description column,
+
+We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.
+
+To do that we can,
