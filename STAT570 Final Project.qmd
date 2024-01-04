@@ -122,4 +122,7 @@ Foundation year and rating variable should not be -1. So firstly we can give the
 
 ```{r}
 
+Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- NA
+Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- NA
+
 ```
