@@ -84,6 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data Description</a></li>
   <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
   <li><a href="#investigating-the-columns" id="toc-investigating-the-columns" class="nav-link" data-scroll-target="#investigating-the-columns">Investigating the Columns</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
 </div>
@@ -538,30 +539,38 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## str_view(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces, "[a-z0-9]+")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Let’s get rid of the parts at the end; Glassdor est. and Employer est.</p>
+<p>Let’s get rid of the parts at the end; Glassdoor est. and Employer est.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Glassdoorest.</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces) </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Glassdoorest.</span><span class="sc">\\</span><span class="st">)"</span>,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">""</span>,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>       Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Employerest.</span><span class="sc">\\</span><span class="st">)"</span>,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">""</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>       Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "$137K-$171" "$137K-$171" "$137K-$171" "$137K-$171" "$137K-$171"
 [6] "$137K-$171"</code></pre>
 </div>
 </div>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"K</span><span class="sc">\\</span><span class="st">(Employerest.</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <p>Let’s see how we can select the numbers that are remaining in the rows: we can use [0-9]+ for this part:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces, <span class="st">"[0-9]+"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Salary_Estimate_wo_spaces, </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"[0-9]+"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] │ $&lt;137&gt;K-$&lt;171&gt;
@@ -653,7 +662,9 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.factor</span>(</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> Factor w/ 172 levels "(Sr.) Data Scientist -",..: 156 50 50 50 50 50 65 50 165 50 ...</code></pre>
@@ -663,7 +674,10 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">levels</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">levels</span>(</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.factor</span>(</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>      Uncleaned_DS_jobs<span class="sc">$</span>Job_Title)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "(Sr.) Data Scientist -"                                
@@ -675,266 +689,495 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 </div>
 </div>
 <p>But before that, we can see that some columns have “Senior”, “Manager” words. By using this information, we can create a new column for seniority of the job.</p>
+<p>By using <code>str_view()</code> function, first, let’s see that columns;</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Senior"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">"^Senior|^Sr|^Experience"</span>, </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [34] │ &lt;Senior&gt; Research Statistician- Data Scientist
+<pre><code>  [1] │ &lt;Sr&gt; Data Scientist
+ [16] │ &lt;Experience&gt;d Data Scientist
+ [34] │ &lt;Senior&gt; Research Statistician- Data Scientist
  [40] │ &lt;Senior&gt; Analyst/Data Scientist
  [47] │ &lt;Senior&gt; Data Scientist
  [57] │ &lt;Senior&gt; Data Scientist
  [93] │ &lt;Senior&gt; Data Scientist
  [99] │ &lt;Senior&gt; Data Scientist
 [104] │ &lt;Senior&gt; Data Scientist
+[107] │ &lt;Sr&gt; Data Engineer (Sr BI Developer)
 [122] │ &lt;Senior&gt; Data Engineer
 [123] │ &lt;Senior&gt; Data Scientist
+[126] │ &lt;Sr&gt;. ML/Data Scientist - AI/NLP/Chatbot
+[130] │ &lt;Sr&gt;. ML/Data Scientist - AI/NLP/Chatbot
 [132] │ &lt;Senior&gt; Data Engineer
 [137] │ &lt;Senior&gt; Data Engineer
 [143] │ &lt;Senior&gt; Data Scientist
-[167] │ &lt;Senior&gt; Data Analyst
-[168] │ &lt;Senior&gt; Data Analyst
-[174] │ &lt;Senior&gt; Data Scientist - Algorithms
-[176] │ &lt;Senior&gt; Data &amp; Machine Learning Scientist
-[185] │ &lt;Senior&gt; Data Analyst
-[195] │ &lt;Senior&gt; Data Scientist - R&amp;D Oncology
-[205] │ &lt;Senior&gt; Data Scientist – Image Analytics, Novartis AI Innovation Lab
-[208] │ &lt;Senior&gt; Business Intelligence Analyst
-... and 35 more</code></pre>
+[154] │ &lt;Sr&gt; Scientist - Extractables &amp; Leachables
+[156] │ &lt;Sr&gt; Data Scientist
+[158] │ &lt;Experience&gt;d Data Scientist
+... and 51 more</code></pre>
 </div>
 </div>
+<p>By using <code>str_detect()</code> function, we can detect the rows including “Senior”, “Sr”, “Experienced”, “Manager” words. This function returns TRUE if they exist, and returns FALSE if they don’t exist.</p>
+<p>By using <code>as.integer()</code> , we assign 1 to exists and 0 to nonexistent.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Scientist"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>SeniorPosition <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_detect</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">regex</span>(<span class="st">"^(Senior|Sr|Experienced)"</span>)</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>             ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now that we defined the senior roles, we can assign the same titles to same jobs.</p>
+<p>Let’s start by Data Scientist. Let’s find the columns including Data Scientist word.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">regex</span>(<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Scientist.*"</span>, </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [2] │ &lt;Data Scientist&gt;
+<pre><code> [1] │ &lt;Sr Data Scientist&gt;
+ [2] │ &lt;Data Scientist&gt;
  [3] │ &lt;Data Scientist&gt;
  [4] │ &lt;Data Scientist&gt;
  [5] │ &lt;Data Scientist&gt;
  [6] │ &lt;Data Scientist&gt;
- [7] │ &lt;Data Scientist&gt; / Machine Learning Expert
+ [7] │ &lt;Data Scientist / Machine Learning Expert&gt;
  [8] │ &lt;Data Scientist&gt;
+ [9] │ &lt;Staff Data Scientist - Analytics&gt;
 [10] │ &lt;Data Scientist&gt;
 [11] │ &lt;Data Scientist&gt;
 [12] │ &lt;Data Scientist&gt;
-[13] │ &lt;Data Scientist&gt; - Statistics, Early Career
+[13] │ &lt;Data Scientist - Statistics, Early Career&gt;
 [15] │ &lt;Data Scientist&gt;
-[17] │ &lt;Data Scientist&gt; - Contract
+[16] │ &lt;Experienced Data Scientist&gt;
+[17] │ &lt;Data Scientist - Contract&gt;
 [18] │ &lt;Data Scientist&gt;
 [21] │ &lt;Data Scientist&gt;
-[22] │ &lt;Data Scientist&gt;/Machine Learning
+[22] │ &lt;Data Scientist/Machine Learning&gt;
 [25] │ &lt;Data Scientist&gt;
-[26] │ &lt;Data Scientist&gt;
-[27] │ &lt;Data Scientist&gt; - Risk
-[28] │ &lt;Data Scientist&gt;-Human Resources
-... and 360 more</code></pre>
+... and 435 more</code></pre>
 </div>
 </div>
+<p>Bu using <code>str_replace_all()</code> we can replace all the rows including Data Scientist word in some way, directly with “Data Scientist”.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Scientist.*"</span>,<span class="st">"Data Scientist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  </span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Scientist.*"</span>,</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Scientist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code> Factor w/ 116 levels "AI/ML - Machine Learning Scientist, Siri Understanding",..: 44 44 44 44 44 44 44 44 44 44 ...</code></pre>
-</div>
 </div>
 <p>Now let’s get Data Analyst titles:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Analyst"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Analyst.*"</span>, </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [19] │ &lt;Data Analyst&gt; II
+<pre><code> [19] │ &lt;Data Analyst II&gt;
  [41] │ &lt;Data Analyst&gt;
- [43] │ &lt;Data Analyst&gt; I
+ [43] │ &lt;Data Analyst I&gt;
  [51] │ &lt;Data Analyst&gt;
+ [55] │ &lt;E-Commerce Data Analyst&gt;
  [61] │ &lt;Data Analyst&gt;
+ [65] │ &lt;Global Data Analyst&gt;
+ [74] │ &lt;Business Data Analyst&gt;
  [76] │ &lt;Data Analyst&gt;
  [87] │ &lt;Data Analyst&gt;
+[111] │ &lt;RFP Data Analyst&gt;
 [112] │ &lt;Data Analyst&gt;
-[118] │ &lt;Data Analyst&gt;/Engineer
+[118] │ &lt;Data Analyst/Engineer&gt;
 [139] │ &lt;Data Analyst&gt;
+[162] │ &lt;Say Business Data Analyst&gt;
 [164] │ &lt;Data Analyst&gt;
+[167] │ &lt;Senior Data Analyst&gt;
+[168] │ &lt;Senior Data Analyst&gt;
+[170] │ &lt;Sr Data Analyst&gt;
 [175] │ &lt;Data Analyst&gt;
-[298] │ &lt;Data Analyst&gt;
-[341] │ &lt;Data Analyst&gt; - Unilever Prestige
-[357] │ &lt;Data Analyst&gt;
-[464] │ &lt;Data Analyst&gt; - Unilever Prestige
-[492] │ &lt;Data Analyst&gt;</code></pre>
+... and 27 more</code></pre>
 </div>
 </div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Analyst.*"</span>,<span class="st">"Data Analyst"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  </span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Analyst.*"</span>,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Analyst"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code> Factor w/ 93 levels "AI/ML - Machine Learning Scientist, Siri Understanding",..: 37 37 37 37 37 37 37 37 37 37 ...</code></pre>
-</div>
 </div>
 <p>Now let’s get Data Engineer titles:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Data Engineer"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Engineer.*"</span>, </span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [35] │ &lt;Data Engineer&gt;
+ [54] │ &lt;Jr. Data Engineer&gt;
  [66] │ &lt;Data Engineer&gt;
- [71] │ &lt;Data Engineer&gt; (Remote)
- [77] │ &lt;Data Engineer&gt;, Enterprise Analytics
+ [71] │ &lt;Data Engineer (Remote)&gt;
+ [77] │ &lt;Data Engineer, Enterprise Analytics&gt;
  [83] │ &lt;Data Engineer&gt;
+[107] │ &lt;Sr Data Engineer (Sr BI Developer)&gt;
 [108] │ &lt;Data Engineer&gt;
 [114] │ &lt;Data Engineer&gt;
 [120] │ &lt;Data Engineer&gt;
+[122] │ &lt;Senior Data Engineer&gt;
 [124] │ &lt;Data Engineer&gt;
 [129] │ &lt;Data Engineer&gt;
+[132] │ &lt;Senior Data Engineer&gt;
 [133] │ &lt;Data Engineer&gt;
+[137] │ &lt;Senior Data Engineer&gt;
 [140] │ &lt;Data Engineer&gt;
+[142] │ &lt;Tableau Data Engineer 20-0117&gt;
 [153] │ &lt;Data Engineer&gt;
 [169] │ &lt;Data Engineer&gt;
-[177] │ &lt;Data Engineer&gt;
-[192] │ &lt;Data Engineer&gt;
-[204] │ &lt;Data Engineer&gt;
-[206] │ &lt;Data Engineer&gt;
-[224] │ &lt;Data Engineer&gt;
-[270] │ &lt;Data Engineer&gt;, Digital &amp; Comp Pathology
-... and 13 more</code></pre>
+... and 27 more</code></pre>
 </div>
 </div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Engineer.*"</span>,<span class="st">"Data Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  </span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>    Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">".*Data</span><span class="sc">\\</span><span class="st">s+Engineer.*"</span>,</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>And Machine Learning Engineers:</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, <span class="fu">regex</span>(<span class="st">"^Machine Learning"</span>, <span class="at">multiline =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Machine</span><span class="sc">\\</span><span class="st">s+Learning.*"</span>, </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [42] │ &lt;Machine Learning&gt; Engineer
- [62] │ &lt;Machine Learning&gt; Engineer
- [89] │ &lt;Machine Learning&gt; Engineer
- [92] │ &lt;Machine Learning&gt; Engineer
-[102] │ &lt;Machine Learning&gt; Engineer
-[135] │ &lt;Machine Learning&gt; Engineer
-[136] │ &lt;Machine Learning&gt; Engineer
-[145] │ &lt;Machine Learning&gt; Engineer
-[159] │ &lt;Machine Learning&gt; Engineer
-[172] │ &lt;Machine Learning&gt; Scientist - Bay Area, CA
-[180] │ &lt;Machine Learning&gt; Engineer
-[203] │ &lt;Machine Learning&gt; Engineer
-[229] │ &lt;Machine Learning&gt; Engineer
-[331] │ &lt;Machine Learning&gt; Engineer
-[333] │ &lt;Machine Learning&gt; Engineer/Scientist
-[340] │ &lt;Machine Learning&gt; Engineer
-[446] │ &lt;Machine Learning&gt; Engineer/Scientist
-[459] │ &lt;Machine Learning&gt; Engineer
-[536] │ &lt;Machine Learning&gt; Scientist / Engineer
-[568] │ &lt;Machine Learning&gt; Engineer
-... and 1 more</code></pre>
+<pre><code> [42] │ &lt;Machine Learning Engineer&gt;
+ [46] │ &lt;Computational Scientist, Machine Learning&gt;
+ [62] │ &lt;Machine Learning Engineer&gt;
+ [69] │ &lt;Data &amp; Machine Learning Scientist&gt;
+ [89] │ &lt;Machine Learning Engineer&gt;
+ [92] │ &lt;Machine Learning Engineer&gt;
+[102] │ &lt;Machine Learning Engineer&gt;
+[135] │ &lt;Machine Learning Engineer&gt;
+[136] │ &lt;Machine Learning Engineer&gt;
+[145] │ &lt;Machine Learning Engineer&gt;
+[159] │ &lt;Machine Learning Engineer&gt;
+[172] │ &lt;Machine Learning Scientist - Bay Area, CA&gt;
+[176] │ &lt;Senior Data &amp; Machine Learning Scientist&gt;
+[180] │ &lt;Machine Learning Engineer&gt;
+[191] │ &lt;Principal Machine Learning Scientist&gt;
+[203] │ &lt;Machine Learning Engineer&gt;
+[220] │ &lt;Senior Machine Learning Scientist - Bay Area, CA&gt;
+[229] │ &lt;Machine Learning Engineer&gt;
+[261] │ &lt;Principal Machine Learning Scientist&gt;
+[331] │ &lt;Machine Learning Engineer&gt;
+... and 16 more</code></pre>
 </div>
 </div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,<span class="st">".*Machine</span><span class="sc">\\</span><span class="st">s+Learning.*"</span>,<span class="st">"Machine Learning Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">".*Machine</span><span class="sc">\\</span><span class="st">s+Learning.*"</span>,</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Machine Learning Engineer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>And Business Intelligence Analysts:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Business</span><span class="sc">\\</span><span class="st">s+Intelligence.*"</span>, </span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [24] │ &lt;Business Intelligence Analyst I- Data Insights&gt;
+ [37] │ &lt;Business Intelligence Analyst&gt;
+[125] │ &lt;Business Intelligence Analyst&gt;
+[208] │ &lt;Senior Business Intelligence Analyst&gt;
+[346] │ &lt;Senior Business Intelligence Analyst&gt;
+[471] │ &lt;Senior Business Intelligence Analyst&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">".*Business</span><span class="sc">\\</span><span class="st">s+Intelligence.*"</span>,</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Business Intelligence Analyst"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Computer Scientists:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Computer</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational.*"</span>, </span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[165] │ &lt;Computational Scientist&gt;
+[189] │ &lt;Computational Behavioral Scientist&gt;
+[215] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[250] │ &lt;Computer Scientist 1&gt;
+[258] │ &lt;Computational Behavioral Scientist&gt;
+[368] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[400] │ &lt;Applied Computer Scientist&gt;
+[517] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[524] │ &lt;COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING&gt;
+[543] │ &lt;COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - TRANSPORTATION TECHNOLOGY&gt;
+[576] │ &lt;Applied Computer Scientist&gt;
+[648] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">".*Computer</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational.*"</span>,</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Computer Scientist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We assigned Computer Scientist here. But, there is a problem.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Computer</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational.*"</span>, </span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[165] │ &lt;Computer Scientist&gt;
+[189] │ &lt;Computer Scientist&gt;
+[215] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[250] │ &lt;Computer Scientist&gt;
+[258] │ &lt;Computer Scientist&gt;
+[368] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[400] │ &lt;Computer Scientist&gt;
+[517] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;
+[524] │ &lt;COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING&gt;
+[543] │ &lt;COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - TRANSPORTATION TECHNOLOGY&gt;
+[576] │ &lt;Computer Scientist&gt;
+[648] │ &lt;ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR&gt;</code></pre>
+</div>
+</div>
+<p>As we can see, <code>str_replace_all()</code> is case sensitive. And we cannot put <code>ignore_case = TRUE</code> in <code>str_replace_all()</code>. So we have to apply this to upper case as well.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">".*COMPUTER</span><span class="sc">\\</span><span class="st">s+SCIENTIST.*|.*COMPUTATIONAL</span><span class="sc">\\</span><span class="st">s+SCIENTIST.*"</span>,</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Computer Scientist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let’s see again:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Computer</span><span class="sc">\\</span><span class="st">s+Scientist.*|.*Computational</span><span class="sc">\\</span><span class="st">s+Scientist.*"</span>, </span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[165] │ &lt;Computer Scientist&gt;
+[189] │ &lt;Computer Scientist&gt;
+[215] │ &lt;Computer Scientist&gt;
+[250] │ &lt;Computer Scientist&gt;
+[258] │ &lt;Computer Scientist&gt;
+[368] │ &lt;Computer Scientist&gt;
+[400] │ &lt;Computer Scientist&gt;
+[517] │ &lt;Computer Scientist&gt;
+[524] │ &lt;Computer Scientist&gt;
+[543] │ &lt;Computer Scientist&gt;
+[576] │ &lt;Computer Scientist&gt;
+[648] │ &lt;Computer Scientist&gt;</code></pre>
+</div>
+</div>
+<p>Now it’s okay.</p>
+<p>Let’s examine Managers this time:</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  Uncleaned_DS_jobs<span class="sc">$</span>Job_Title, </span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regex</span>(<span class="st">".*Analytics</span><span class="sc">\\</span><span class="st">s+Manager.*|.*Data</span><span class="sc">\\</span><span class="st">s+Science</span><span class="sc">\\</span><span class="st">sManager.*|.*Director.*|.*Vice</span><span class="sc">\\</span><span class="st">sPresident.*|.*VP.*|.*Principal.*|.*Manager.*"</span>, </span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiline =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [86] │ &lt;Data Science Manager, Payment Acceptance - USA&gt;
+[150] │ &lt;Analytics Manager&gt;
+[198] │ &lt;Principal Scientist/Associate Director, Quality Control and Analytical Technologies&gt;
+[218] │ &lt;Analytics Manager - Data Mart&gt;
+[266] │ &lt;Director of Data Science&gt;
+[272] │ &lt;Manager / Lead, Data Science &amp; Analytics&gt;
+[313] │ &lt;Principal Scientist/Associate Director, Quality Control and Analytical Technologies&gt;
+[332] │ &lt;Principal Data &amp; Analytics Platform Engineer&gt;
+[343] │ &lt;VP, Data Science&gt;
+[381] │ &lt;Analytics Manager - Data Mart&gt;
+[470] │ &lt;VP, Data Science&gt;
+[523] │ &lt;Manager, Field Application Scientist, Southeast&gt;
+[564] │ &lt;Data Science Manager&gt;
+[581] │ &lt;Vice President, Biometrics and Clinical Data Management&gt;</code></pre>
+</div>
+</div>
+<p>Let’s replace them with “Data Science and Analytics Manager”</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Job_Title <span class="ot">&lt;-</span>  </span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(</span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>    Uncleaned_DS_jobs<span class="sc">$</span>Job_Title,</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">".*Analytics</span><span class="sc">\\</span><span class="st">s+Manager.*|.*Data</span><span class="sc">\\</span><span class="st">s+Science</span><span class="sc">\\</span><span class="st">sManager.*|.*Director.*|.*Vice</span><span class="sc">\\</span><span class="st">sPresident.*|.*VP.*|.*Principal.*|.*Manager.*"</span>,<span class="st">"Data Science and Analytics Manager"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">as.factor</span>(Uncleaned_DS_jobs<span class="sc">$</span>Job_Title))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "Analytics Manager"                                                                               
- [2] "Analytics Manager - Data Mart"                                                                   
- [3] "Applied AI Scientist / Engineer"                                                                 
- [4] "Applied Computer Scientist"                                                                      
- [5] "Business Intelligence Analyst"                                                                   
- [6] "Business Intelligence Analyst I- Data Insights"                                                  
- [7] "Chief Scientist"                                                                                 
- [8] "Computational Behavioral Scientist"                                                              
- [9] "Computational Scientist"                                                                         
-[10] "COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING"                 
-[11] "COMPUTER SCIENTIST - ENGINEER - RESEARCH COMPUTER SCIENTIST - TRANSPORTATION TECHNOLOGY"         
-[12] "Computer Scientist 1"                                                                            
-[13] "Computer Vision / Deep Learning Scientist"                                                       
-[14] "Data Analyst"                                                                                    
-[15] "Data Analytics Engineer"                                                                         
-[16] "Data Architect"                                                                                  
-[17] "Data Engineer"                                                                                   
-[18] "Data Integration and Modeling Engineer"                                                          
-[19] "Data Modeler"                                                                                    
-[20] "Data Modeler (Analytical Systems)"                                                               
-[21] "Data Science Analyst"                                                                            
-[22] "Data Science Instructor"                                                                         
-[23] "Data Science Manager"                                                                            
-[24] "Data Science Manager, Payment Acceptance - USA"                                                  
-[25] "Data Science Software Engineer"                                                                  
-[26] "Data Scientist"                                                                                  
-[27] "Data Solutions Engineer - Data Modeler"                                                          
-[28] "Decision Scientist"                                                                              
-[29] "Developer III - Data Science"                                                                    
-[30] "Development Scientist, Voltaren"                                                                 
-[31] "Director of Data Science"                                                                        
-[32] "ELISA RESEARCH SCIENTIST (CV-15)"                                                                
-[33] "ENGINEER - COMPUTER SCIENTIST - RESEARCH COMPUTER SCIENTIST - SIGNAL PROCESSING - SAN ANTONIO OR"
-[34] "Environmental Data Science"                                                                      
-[35] "Equity Data Insights Analyst - Quantitative Analyst"                                             
-[36] "Human Factors Scientist"                                                                         
-[37] "Hydrogen/Tritium Materials Scientist (Experienced)"                                              
-[38] "Information Systems Engineering Specialist (Engineering Scientist)"                              
-[39] "IT Partner Digital Health Technology and Data Science"                                           
-[40] "Lead Certified Clinical Laboratory Scientist - Saturday - Tuesday, 8:00pm - 6:30am shift"        
-[41] "Machine Learning Engineer"                                                                       
-[42] "Manager / Lead, Data Science &amp; Analytics"                                                        
-[43] "Manager, Field Application Scientist, Southeast"                                                 
-[44] "Medical Lab Scientist"                                                                           
-[45] "NGS Scientist"                                                                                   
-[46] "Principal Data &amp; Analytics Platform Engineer"                                                    
-[47] "Principal Scientist/Associate Director, Quality Control and Analytical Technologies"             
-[48] "Production Engineer - Statistics/Data Analysis"                                                  
-[49] "Purification Scientist"                                                                          
-[50] "Real World Evidence (RWE) Scientist"                                                             
-[51] "Research Scientist - Patient-Centered Research (Remote)"                                         
-[52] "Research Scientist Patient Preferences (Remote)"                                                 
-[53] "Scientist - Biomarker and Flow Cytometry"                                                        
-[54] "Scientist - Molecular Biology"                                                                   
-[55] "Scientist / Group Lead, Cancer Biology"                                                          
-[56] "Scientist/Research Associate-Metabolic Engineering"                                              
-[57] "Senior Business Intelligence Analyst"                                                            
-[58] "Senior Scientist - Toxicologist - Product Integrity (Stewardship)"                               
-[59] "Software Engineer - Data Science"                                                                
-[60] "Sr Scientist - Extractables &amp; Leachables"                                                        
-[61] "Sr. Research Associate/ Scientist, NGS prep &amp; Molecular Genomics"                                
-[62] "Staff Scientist- Upstream PD"                                                                    
-[63] "Statistical Scientist"                                                                           
-[64] "Vice President, Biometrics and Clinical Data Management"                                         
-[65] "VP, Data Science"                                                                                
-[66] "Weapons and Sensors Engineer/Scientist"                                                          </code></pre>
+<pre><code>                                                         Applied AI Scientist / Engineer 
+                                                                                       1 
+                                                           Business Intelligence Analyst 
+                                                                                       6 
+                                                                         Chief Scientist 
+                                                                                       1 
+                                                                      Computer Scientist 
+                                                                                      12 
+                                               Computer Vision / Deep Learning Scientist 
+                                                                                       2 
+                                                                            Data Analyst 
+                                                                                      47 
+                                                                 Data Analytics Engineer 
+                                                                                       2 
+                                                                          Data Architect 
+                                                                                       1 
+                                                                           Data Engineer 
+                                                                                      47 
+                                                  Data Integration and Modeling Engineer 
+                                                                                       1 
+                                                                            Data Modeler 
+                                                                                       1 
+                                                       Data Modeler (Analytical Systems) 
+                                                                                       3 
+                                                                    Data Science Analyst 
+                                                                                       1 
+                                                      Data Science and Analytics Manager 
+                                                                                      14 
+                                                                 Data Science Instructor 
+                                                                                       1 
+                                                          Data Science Software Engineer 
+                                                                                       4 
+                                                                          Data Scientist 
+                                                                                     455 
+                                                  Data Solutions Engineer - Data Modeler 
+                                                                                       1 
+                                                                      Decision Scientist 
+                                                                                       3 
+                                                            Developer III - Data Science 
+                                                                                       1 
+                                                         Development Scientist, Voltaren 
+                                                                                       1 
+                                                        ELISA RESEARCH SCIENTIST (CV-15) 
+                                                                                       1 
+                                                              Environmental Data Science 
+                                                                                       1 
+                                     Equity Data Insights Analyst - Quantitative Analyst 
+                                                                                       1 
+                                                                 Human Factors Scientist 
+                                                                                       1 
+                                      Hydrogen/Tritium Materials Scientist (Experienced) 
+                                                                                       1 
+                      Information Systems Engineering Specialist (Engineering Scientist) 
+                                                                                       1 
+                                   IT Partner Digital Health Technology and Data Science 
+                                                                                       2 
+Lead Certified Clinical Laboratory Scientist - Saturday - Tuesday, 8:00pm - 6:30am shift 
+                                                                                       1 
+                                                               Machine Learning Engineer 
+                                                                                      36 
+                                                                   Medical Lab Scientist 
+                                                                                       1 
+                                                                           NGS Scientist 
+                                                                                       1 
+                                          Production Engineer - Statistics/Data Analysis 
+                                                                                       1 
+                                                                  Purification Scientist 
+                                                                                       1 
+                                                     Real World Evidence (RWE) Scientist 
+                                                                                       1 
+                                 Research Scientist - Patient-Centered Research (Remote) 
+                                                                                       2 
+                                         Research Scientist Patient Preferences (Remote) 
+                                                                                       1 
+                                                Scientist - Biomarker and Flow Cytometry 
+                                                                                       1 
+                                                           Scientist - Molecular Biology 
+                                                                                       1 
+                                                  Scientist / Group Lead, Cancer Biology 
+                                                                                       2 
+                                      Scientist/Research Associate-Metabolic Engineering 
+                                                                                       1 
+                       Senior Scientist - Toxicologist - Product Integrity (Stewardship) 
+                                                                                       2 
+                                                        Software Engineer - Data Science 
+                                                                                       1 
+                                                Sr Scientist - Extractables &amp; Leachables 
+                                                                                       1 
+                        Sr. Research Associate/ Scientist, NGS prep &amp; Molecular Genomics 
+                                                                                       1 
+                                                            Staff Scientist- Upstream PD 
+                                                                                       1 
+                                                                   Statistical Scientist 
+                                                                                       1 
+                                                  Weapons and Sensors Engineer/Scientist 
+                                                                                       2 </code></pre>
 </div>
 </div>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Barr, D., &amp; DeBruine, L. (n.d.). Data Cleaning. <a href="https://rgup.gitlab.io/research_cycle/03_tidyr.html" class="uri">https://rgup.gitlab.io/research_cycle/03_tidyr.html</a></p>
+<p>Rahman, R. (n.d.). [Dataset] Data Science Job Posting on Glassdoor. Retrieved December 20, 2023,. <a href="https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data" class="uri">https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data</a></p>
+<p>Wickham, H., Çetinkaya-Rundel, M., &amp; Grolemund, G. (2023). <em>R for Data Science: Import, Tidy, transform, visualize, and model data</em>. O'Reilly Media, Inc.</p>
 </section>
 
 </main>
