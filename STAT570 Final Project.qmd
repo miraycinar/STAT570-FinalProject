@@ -194,9 +194,24 @@ Uncleaned_DS_jobs$Headquarters<- as.character(Uncleaned_DS_jobs$Headquarters)
 
 
 Uncleaned_DS_jobs$Headquarters[Uncleaned_DS_jobs$Headquarters == "-1"] <- "No information"
+
 ```
 
-\-\-\-\-\--
+Also, there are -1 values in the type of ownership.
+
+We check how many -1 values are in the variable.
+
+```{r}
+sum(Uncleaned_DS_jobs$Type_of_Ownership == -1)
+```
+
+```{r}
+Uncleaned_DS_jobs$Type_of_Ownership <- as.character(Uncleaned_DS_jobs$Type_of_Ownership)
+
+
+Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Type_of_Ownership == "-1"] <- "No information"
+
+```
 
 ## Investigating the Columns
 
