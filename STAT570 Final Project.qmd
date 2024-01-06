@@ -419,8 +419,7 @@ Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
   "Business Intelligence Analyst")
 ```
 
-<<<<<<< HEAD
-Computer Scientists:
+\<\<\<\<\<\<\< HEAD Computer Scientists:
 
 ```{r}
 str_view(
@@ -487,7 +486,7 @@ Uncleaned_DS_jobs$Job_Title <-
     ".*Analytics\\s+Manager.*|.*Data\\s+Science\\sManager.*|.*Director.*|.*Vice\\sPresident.*|.*VP.*|.*Principal.*|.*Manager.*","Data Science and Analytics Manager")
 ```
 
-Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist, "Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
+Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist,"Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
 
 ```{r}
 str_view(Uncleaned_DS_jobs$Job_Title, regex("^(?!.*Data\\s+Analyst.*|.*Data\\s+Scientist.*|.*Data\\s+Science\\s+and\\s+Analytics\\s+Manager.*|.*Data\\sEngineer.*).*data.*", ignore_case = TRUE))
@@ -497,17 +496,7 @@ str_view(Uncleaned_DS_jobs$Job_Title, regex("^(?!.*Data\\s+Analyst.*|.*Data\\s+S
 summary(as.factor(Uncleaned_DS_jobs$Job_Title))
 ```
 
-## References
-
-Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research_cycle/03_tidyr.html>
-
-Rahman, R. (n.d.). \[Dataset\] Data Science Job Posting on Glassdoor. Retrieved December 20, 2023,. <https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data>
-
-Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science: Import, Tidy, transform, visualize, and model data*. O'Reilly Media, Inc.
-
-
-=======
-JOB DESCRIPTION
+-   Job Description
 
 When we look at the job description column,
 
@@ -911,3 +900,10 @@ Uncleaned_DS_jobs$stat_needed <- as.factor(Uncleaned_DS_jobs$stat_needed)
 summary(Uncleaned_DS_jobs)
 ```
 
+## References
+
+Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research_cycle/03_tidyr.html>
+
+Rahman, R. (n.d.). \[Dataset\] Data Science Job Posting on Glassdoor. Retrieved December 20, 2023,. <https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data>
+
+Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science: Import, Tidy, transform, visualize, and model data*. O'Reilly Media, Inc.
