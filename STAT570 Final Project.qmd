@@ -291,7 +291,7 @@ By using `separate_wider_regex()` function, we defined the pattern in the data, 
 head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
 ```
 
-For not confusing the numbers later, lets multiply the low limit and high limit numbers with 1000.
+For not confusing the numbers later, lets multiply the low limit and high limit numbers with 1000 and make Salary Estimate factor.
 
 ```{r}
 Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%  
@@ -300,6 +300,8 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
 ```
 
 ```{r}
+Uncleaned_DS_jobs$Salary_Estimate <- as.factor(Uncleaned_DS_jobs$Salary_Estimate)
+
 head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
 ```
 
@@ -417,71 +419,6 @@ Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
   "Machine Learning Engineer")
 ```
 
-And Business Intelligence Analysts:
-
-```{r}
-str_view(
-  Uncleaned_DS_jobs$Job_Title, 
-  regex(".*Business\\s+Intelligence.*", 
-        multiline = TRUE, 
-        ignore_case = TRUE))
-```
-
-```{r}
-Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
-  Uncleaned_DS_jobs$Job_Title,
-  ".*Business\\s+Intelligence.*",
-  "Business Intelligence Analyst")
-```
-
-\<\<\<\<\<\<\< HEAD Computer Scientists:
-
-```{r}
-str_view(
-  Uncleaned_DS_jobs$Job_Title, 
-  regex(".*Computer\\s+Scientist.*|.*Computational\\s+Scientist.*|.*Computational.*", 
-        multiline = TRUE, 
-        ignore_case = TRUE))
-```
-
-```{r}
-Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
-  Uncleaned_DS_jobs$Job_Title,
-  ".*Computer\\s+Scientist.*|.*Computational\\s+Scientist.*|.*Computational.*",
-  "Computer Scientist")
-```
-
-We assigned Computer Scientist here. But, there is a problem.
-
-```{r}
-str_view(
-  Uncleaned_DS_jobs$Job_Title, 
-  regex(".*Computer\\s+Scientist.*|.*Computational\\s+Scientist.*|.*Computational.*", 
-        multiline = TRUE, 
-        ignore_case = TRUE))
-```
-
-As we can see, `str_replace_all()` is case sensitive. And we cannot put `ignore_case = TRUE` in `str_replace_all()`. So we have to apply this to upper case as well.
-
-```{r}
-Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
-  Uncleaned_DS_jobs$Job_Title,
-  ".*COMPUTER\\s+SCIENTIST.*|.*COMPUTATIONAL\\s+SCIENTIST.*",
-  "Computer Scientist")
-```
-
-Let's see again:
-
-```{r}
-str_view(
-  Uncleaned_DS_jobs$Job_Title, 
-  regex(".*Computer\\s+Scientist.*|.*Computational\\s+Scientist.*", 
-        multiline = TRUE, 
-        ignore_case = TRUE))
-```
-
-Now it's okay.
-
 Let's examine Managers this time:
 
 ```{r}
@@ -498,24 +435,52 @@ Let's replace them with "Data Science and Analytics Manager"
 Uncleaned_DS_jobs$Job_Title <-  
   str_replace_all(
     Uncleaned_DS_jobs$Job_Title,
-    ".*Analytics\\s+Manager.*|.*Data\\s+Science\\sManager.*|.*Director.*|.*Vice\\sPresident.*|.*VP.*|.*Principal.*|.*Manager.*","Data Science and Analytics Manager")
+    ".*Analytics\\s+Manager.*|.*Data\\s+Science\\sManager.*|.*Director.*|.*Vice\\sPresident.*|.*VP.*|.*Principal.*|.*Manager.*",
+    "Data Science and Analytics Manager")
 ```
 
-Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist,"Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
+Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist, "Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
 
 ```{r}
-str_view(Uncleaned_DS_jobs$Job_Title, regex("^(?!.*Data\\s+Analyst.*|.*Data\\s+Scientist.*|.*Data\\s+Science\\s+and\\s+Analytics\\s+Manager.*|.*Data\\sEngineer.*).*data.*", ignore_case = TRUE))
+str_view(
+  Uncleaned_DS_jobs$Job_Title, 
+  regex("^(?!.*Data\\s+Analyst.*|.*Data\\s+Scientist.*|.*Data\\s+Science\\s+and\\s+Analytics\\s+Manager.*|.*Data\\sEngineer.*).*data.*", 
+        ignore_case = TRUE))
 ```
 
+We will save these as "Other Data Positions"
+
 ```{r}
-summary(as.factor(Uncleaned_DS_jobs$Job_Title))
+Uncleaned_DS_jobs$Job_Title <-  
+  str_replace_all(
+    Uncleaned_DS_jobs$Job_Title,
+     regex("(?!Data\\s+(Analyst|Scientist|Engineer|Science\\s+and\\s+Analytics\\s+Manager)).*Data.*"),
+    "Other Data Positions" )
+```
+
+Finally, we will save all the jobs that are not include "Data" word in it and not "Machine Learning Engineer" into "Others" category because there are a lot of jobs with the titles like Scientist, Researcher etc.
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <-  
+  str_replace_all(
+    Uncleaned_DS_jobs$Job_Title, 
+    regex("^(?!.*(Data|Machine\\s+Learning\\s+Engineer)).*$"), 
+    "Others")
+```
+
+Finally, let's see our clean job titles:
+
+```{r}
+Uncleaned_DS_jobs$Job_Title <- as.factor(Uncleaned_DS_jobs$Job_Title)
+
+summary(Uncleaned_DS_jobs$Job_Title)
 ```
 
 -   Job Description
 
 When we look at the job description column,
 
-We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.
+We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill SQL.
 
 First, we need to look the job description column in a detailed way.
 
@@ -525,9 +490,9 @@ view(Uncleaned_DS_jobs$Job_Description)
 
 We see some common requirements and common job descriptions for jobs.
 
-For this we can separate the columns like sql and we can say that this jobs wants an sql bu using factor 1 or 0.
+For this we can separate the columns like SQL and we can say that this jobs wants an SQL bu using factor 1 or 0.
 
-Lets start with sql
+Let's start with SQL:
 
 In this we should check if SQL is mentioned in the variable job description
 
@@ -547,7 +512,7 @@ sql_mentioned <- function(description) {
 
 ```
 
-Now we need to create a column called sql, in this column wee see if sql is a requirement in the job description or not.
+Now we need to create a column called SQL, in this column wee see if SQLis a requirement in the job description or not.
 
 ```{r}
 Uncleaned_DS_jobs$sql_needed <- sapply(Uncleaned_DS_jobs$Job_Description, sql_mentioned)
@@ -557,7 +522,7 @@ Uncleaned_DS_jobs$sql_needed <- sapply(Uncleaned_DS_jobs$Job_Description, sql_me
 Uncleaned_DS_jobs$sql_needed <- as.factor(Uncleaned_DS_jobs$sql_needed)
 ```
 
-Lets check the summary of the new column and th data set
+Let's check the summary of the new column and the data set:
 
 ```{r}
 summary(Uncleaned_DS_jobs)
@@ -594,7 +559,7 @@ summary(Uncleaned_DS_jobs)
 summary(Uncleaned_DS_jobs$sql_needed)
 ```
 
-Now for Excel
+Now for Excel:
 
 ```{r}
 excel_mentioned <- function(description) {
@@ -627,7 +592,7 @@ summary(Uncleaned_DS_jobs)
 summary(Uncleaned_DS_jobs$excel_needed)
 ```
 
-For Hadoop
+For Hadoop:
 
 ```{r}
 hadoop_mentioned <- function(description) {
@@ -918,6 +883,8 @@ summary(Uncleaned_DS_jobs)
 ## References
 
 Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research_cycle/03_tidyr.html>
+
+*GREP: Pattern matching and replacement*. RDocumentation. (n.d.). <https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep>
 
 Rahman, R. (n.d.). \[Dataset\] Data Science Job Posting on Glassdoor. Retrieved December 20, 2023,. <https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data>
 
