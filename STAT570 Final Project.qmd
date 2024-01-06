@@ -439,7 +439,7 @@ Uncleaned_DS_jobs$Job_Title <-
     "Data Science and Analytics Manager")
 ```
 
-Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist, "Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
+Now, bu using `str_view()` function, we want to see all the jobs that have "Data" in it, but not "Data Analyst", "Data Scientist,"Data Engineer" or "Data Science and Analytics Manager" because we already took care of that titles.
 
 ```{r}
 str_view(
