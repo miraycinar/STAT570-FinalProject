@@ -120,21 +120,16 @@ And we can look how many rows have -1 foundation year and -1 rating
 sum(Uncleaned_DS_jobs$Founded == -1 & Uncleaned_DS_jobs$Rating == -1)
 ```
 
-Foundation year and rating variable should not be -1. So firstly we can give them a NA value and we can impute them by using mean.
+Foundation year and rating variable should not be -1. So firstly for the rating variable we give change -1 to 0.
 
 ```{r}
 
-Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- NA
+Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- 0
 Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- NA
 
 ```
 
-Now we can use mean imputation method
-
-```{r}
-rating_mean <- mean(Uncleaned_DS_jobs$Rating, na.rm = TRUE)
-Uncleaned_DS_jobs$Rating[is.na(Uncleaned_DS_jobs$Rating)] <- rating_mean
-```
+Now we can use mean imputation method:
 
 Now lets check if it worked,
 
@@ -200,12 +195,6 @@ Uncleaned_DS_jobs$Headquarters<- as.character(Uncleaned_DS_jobs$Headquarters)
 
 Uncleaned_DS_jobs$Headquarters[Uncleaned_DS_jobs$Headquarters == "-1"] <- "No information"
 ```
-
-When we look at the job description column,
-
-We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.
-
-To do that we can,
 
 \-\-\-\-\--
 
@@ -430,6 +419,7 @@ Uncleaned_DS_jobs$Job_Title <-  str_replace_all(
   "Business Intelligence Analyst")
 ```
 
+<<<<<<< HEAD
 Computer Scientists:
 
 ```{r}
@@ -514,3 +504,410 @@ Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research
 Rahman, R. (n.d.). \[Dataset\] Data Science Job Posting on Glassdoor. Retrieved December 20, 2023,. <https://www.kaggle.com/datasets/rashikrahmanpritom/data-science-job-posting-on-glassdoor/data>
 
 Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science: Import, Tidy, transform, visualize, and model data*. O'Reilly Media, Inc.
+
+
+=======
+JOB DESCRIPTION
+
+When we look at the job description column,
+
+We have so many different values but we can differentiate them into other columns like we can say that a job wants the skill sql.
+
+First, we need to look the job description column in a detailed way.
+
+```{r}
+view(Uncleaned_DS_jobs$Job_Description)
+```
+
+We see some common requirements and common job descriptions for jobs.
+
+For this we can separate the columns like sql and we can say that this jobs wants an sql bu using factor 1 or 0.
+
+Lets start with sql
+
+In this we should check if SQL is mentioned in the variable job description
+
+```{r}
+sql_mentioned <- function(description) {
+  # We use tolower to match the sql in the job description
+  description <- tolower(description)
+  
+  # Check if SQL is mentioned
+  if (grepl("\\bsql\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+
+
+```
+
+Now we need to create a column called sql, in this column wee see if sql is a requirement in the job description or not.
+
+```{r}
+Uncleaned_DS_jobs$sql_needed <- sapply(Uncleaned_DS_jobs$Job_Description, sql_mentioned)
+```
+
+```{r}
+Uncleaned_DS_jobs$sql_needed <- as.factor(Uncleaned_DS_jobs$sql_needed)
+```
+
+Lets check the summary of the new column and th data set
+
+```{r}
+summary(Uncleaned_DS_jobs)
+summary(Uncleaned_DS_jobs$sql_needed)
+
+```
+
+Now for python we repeat the same process.
+
+```{r}
+python_mentioned <- function(description) {
+  # We use tolower to match the python in the job description
+  description <- tolower(description)
+  
+  # Check if python is mentioned
+  if (grepl("\\bpython\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$python_needed <- sapply(Uncleaned_DS_jobs$Job_Description, python_mentioned)
+```
+
+```{r}
+Uncleaned_DS_jobs$python_needed <- as.factor(Uncleaned_DS_jobs$python_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+summary(Uncleaned_DS_jobs$sql_needed)
+```
+
+Now for Excel
+
+```{r}
+excel_mentioned <- function(description) {
+  # We use tolower to match the excel in the job description
+  description <- tolower(description)
+  
+  # Check if excel is mentioned
+  if (grepl("\\bexcel\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$excel_needed <- sapply(Uncleaned_DS_jobs$Job_Description, excel_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$excel_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$excel_needed <- as.factor(Uncleaned_DS_jobs$excel_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+summary(Uncleaned_DS_jobs$excel_needed)
+```
+
+For Hadoop
+
+```{r}
+hadoop_mentioned <- function(description) {
+  # We use tolower to match the hadoop in the job description
+  description <- tolower(description)
+  
+  # Check if hadoop is mentioned
+  if (grepl("\\bhadoop\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$hadoop_needed <- sapply(Uncleaned_DS_jobs$Job_Description, hadoop_mentioned)
+```
+
+```{r}
+
+summary(Uncleaned_DS_jobs$hadoop_needed)
+
+```
+
+```{r}
+Uncleaned_DS_jobs$hadoop_needed<- as.factor(Uncleaned_DS_jobs$hadoop_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+SPARK
+
+```{r}
+spark_mentioned <- function(description) {
+  # We use tolower to match the spark in the job description
+  description <- tolower(description)
+  
+  # Check if spark is mentioned
+  if (grepl("\\bspark\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$spark_needed <- sapply(Uncleaned_DS_jobs$Job_Description, spark_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$spark_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$spark_needed <- as.factor(Uncleaned_DS_jobs$spark_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+AWS
+
+```{r}
+aws_mentioned <- function(description) {
+  # We use tolower to match the AWS in the job description
+  description <- tolower(description)
+  
+  # Check if AWS is mentioned
+  if (grepl("\\baws\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+
+```
+
+```{r}
+Uncleaned_DS_jobs$aws_needed <- sapply(Uncleaned_DS_jobs$Job_Description, aws_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$aws_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$aws_needed <- as.factor(Uncleaned_DS_jobs$aws_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+TABLEAU
+
+```{r}
+tableau_mentioned <- function(description) {
+  # We use tolower to match the Tableau in the job description
+  description <- tolower(description)
+  
+  # Check if Tableau is mentioned
+  if (grepl("\\btableau\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$tableau_needed <- sapply(Uncleaned_DS_jobs$Job_Description, tableau_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$tableau_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$tableau_needed <- as.factor(Uncleaned_DS_jobs$tableau_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+BIG_DATA
+
+```{r}
+bigdata_mentioned <- function(description) {
+  # We use tolower to match the Big data in the job description
+  description <- tolower(description)
+  
+  # Check if Big data is mentioned
+  if (grepl("\\bbig-data\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$bigdata_needed <- sapply(Uncleaned_DS_jobs$Job_Description, bigdata_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$bigdata_needed)
+```
+
+```{r}
+
+Uncleaned_DS_jobs$bigdata_needed<- as.factor(Uncleaned_DS_jobs$bigdata_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+NUMPY
+
+```{r}
+numpy_mentioned <- function(description) {
+  # We use tolower to match the Numpy in the job description
+  description <- tolower(description)
+  
+  # Check if Numpy is mentioned
+  if (grepl("\\bnumpy\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$numpy_needed <- sapply(Uncleaned_DS_jobs$Job_Description, numpy_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$numpy_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$numpy_needed <- as.factor(Uncleaned_DS_jobs$numpy_needed)
+```
+
+MACHINE LEARNING
+
+```{r}
+ML_mentioned <- function(description) {
+  # We use tolower to match the ML in the job description
+  description <- tolower(description)
+  
+  # Check if ML is mentioned
+  if (grepl("\\bmachine learning\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$ML_needed <- sapply(Uncleaned_DS_jobs$Job_Description, ML_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$ML_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$ML_needed<- as.factor(Uncleaned_DS_jobs$ML_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+DEEP LEARNING
+
+```{r}
+DL_mentioned <- function(description) {
+  # We use tolower to match the DL in the job description
+  description <- tolower(description)
+  
+  # Check if DL is mentioned
+  if (grepl("\\bdeep learning\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$DL_needed <- sapply(Uncleaned_DS_jobs$Job_Description, DL_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$DL_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$DL_needed <- as.factor(Uncleaned_DS_jobs$DL_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
+STATISTICS
+
+```{r}
+stat_mentioned <- function(description) {
+  # We use tolower to match the statistics in the job description
+  description <- tolower(description)
+  
+  # Check if statistics is mentioned
+  if (grepl("\\bstatistics\\b", description)) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+```
+
+```{r}
+Uncleaned_DS_jobs$stat_needed <- sapply(Uncleaned_DS_jobs$Job_Description, stat_mentioned)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs$stat_needed)
+```
+
+```{r}
+Uncleaned_DS_jobs$stat_needed <- as.factor(Uncleaned_DS_jobs$stat_needed)
+```
+
+```{r}
+summary(Uncleaned_DS_jobs)
+```
+
