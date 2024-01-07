@@ -142,10 +142,6 @@ summary(as.factor(Uncleaned_DS_jobs$Founded), maxsum = 6)
 
 From the summary we also fix the problem for Founded.
 
-```{r}
-
-```
-
 -   Sector
 
 Realizing that sector variable also has -1 values.
@@ -164,13 +160,29 @@ Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
 Histogram of the Sector Variable:
 
 ```{r}
-sector_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Sector)) + 
-  labs(title = "Distribution of Sector", x = "Sector", subtitle = "") + 
-  geom_bar(colour="darkblue", fill="lightblue") + 
-  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.68) +
-  theme_classic()+
-   theme(axis.text.x = element_text(size = 8.5, angle = 45, hjust = 1))
-sector_plot
+top10_sector <- Uncleaned_DS_jobs %>%
+  group_by(Sector) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(10)
+
+# Reorder the levels of Sector based on frequency
+plot_data <-  Uncleaned_DS_jobs
+plot_data$Sector <- factor(plot_data$Sector, levels = top10_sector$Sector)
+
+# Filter data to include only the top 10 sector
+filtered_data <- plot_data %>%
+  filter(Sector %in% top10_sector$Sector)
+
+Sector_plot_top10 <- ggplot(filtered_data, aes(x = Sector)) +
+  labs(title = "Distribution of Top 10 Sector", x = "Sector", subtitle = "") +
+  geom_bar(colour = "darkblue", fill = "lightblue") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))
+
+
+Sector_plot_top10
 ```
 
 -   Industry
@@ -339,13 +351,24 @@ summary(as.factor(Uncleaned_DS_jobs$Size))
 Histogram of the Size variable:
 
 ```{r}
-size_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Size)) + 
-  labs(title = "Distribution of Size", x = "Size", subtitle = "") + 
-  geom_bar(colour="darkblue", fill="lightblue") + 
-  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.2) +
-  theme_classic()+
-   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+library(dplyr)
+
+# Create a frequency table for Size
+size_counts <- count(Uncleaned_DS_jobs, Size)
+
+# Sort the data by count in ascending order
+size_counts <- arrange(size_counts, desc(n))
+
+# Create the plot
+size_plot <- ggplot(size_counts, aes(x = reorder(Size, n), y = n)) + 
+  labs(title = "Distribution of Size of the Companies", x = "Size", y = "Frequency") + 
+  geom_col(colour = "darkblue", fill = "lightblue") + 
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+
 size_plot
+
 ```
 
 -   Competitors
@@ -412,6 +435,25 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
   
 ```
 
+Let's visualize Location_State variable:
+
+```{r}
+
+locationstates_counts <- count(Uncleaned_DS_jobs, Location_State)
+
+# Sort the data by count in ascending order
+locationstates_counts <- arrange(locationstates_counts, desc(n))
+
+# Create the plot
+locationstate_plot <- ggplot(locationstates_counts, aes(x = reorder(Location_State, n), y = n)) + 
+  labs(title = "Distribution of States of the Locations of the Companies", x = "States", y = "Frequency") + 
+  geom_col(colour = "darkblue", fill = "lightblue") + 
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+locationstate_plot
+```
+
 -   Headquarters
 
 For the headquarters we have -1 values also,
@@ -475,6 +517,24 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
   
 ```
 
+Let's visualize Headquarters States:
+
+```{r}
+hqstates_counts <- count(Uncleaned_DS_jobs, Headquarters_State)
+
+# Sort the data by count in ascending order
+hqstates_counts <- arrange(hqstates_counts, desc(n))
+
+# Create the plot
+hqstate_plot <- ggplot(hqstates_counts, aes(x = reorder(Headquarters_State, n), y = n)) + 
+  labs(title = "Distribution of States of the Locations of the Headquarters", x = "States", y = "Frequency") + 
+  geom_col(colour = "darkblue", fill = "lightblue") + 
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+hqstate_plot
+```
+
 -   Type Of Ownership
 
 There are -1 values in the Type of Ownership also.
@@ -486,13 +546,31 @@ sum(Uncleaned_DS_jobs$Type_of_Ownership == -1)
 ```
 
 ```{r}
-Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Type_of_Ownership == "-1"] <- "No information"
+Uncleaned_DS_jobs$Type_of_Ownership[Uncleaned_DS_jobs$Type_of_Ownership == "-1"] <- "Unknown"
 ```
 
 Let's see the summary:
 
 ```{r}
 summary(as.factor(Uncleaned_DS_jobs$Type_of_Ownership))
+```
+
+Let's visualize type of ownerships of the companies:
+
+```{r}
+Type_of_Ownership_counts <- count(Uncleaned_DS_jobs, Type_of_Ownership)
+
+# Sort the data by count in ascending order
+Type_of_Ownership_counts <- arrange(Type_of_Ownership_counts, desc(n))
+
+# Create the plot
+tow_plot <- ggplot(Type_of_Ownership_counts, aes(x = reorder(Type_of_Ownership, n), y = n)) + 
+  labs(title = "Distribution of Type of Ownerships of the Companies", x = "Type of Ownership", y = "Frequency") + 
+  geom_col(colour = "darkblue", fill = "lightblue") + 
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+tow_plot
 ```
 
 -   Salary Estimation
@@ -759,6 +837,23 @@ Uncleaned_DS_jobs$Job_Title <- as.factor(Uncleaned_DS_jobs$Job_Title)
 summary(Uncleaned_DS_jobs$Job_Title)
 ```
 
+Let's visualize Job Titles:
+
+```{r}
+jt_counts <- count(Uncleaned_DS_jobs, Job_Title)
+
+# Sort the data by count in ascending order
+jt_counts <- arrange(jt_counts, desc(n))
+
+jt_plot <- ggplot(jt_counts, aes(x = reorder(Job_Title, n), y = n)) + 
+   labs(title = "Distribution of Job Titles", x = "Job Titles", y = "Frequency") + 
+   geom_col(colour = "darkblue", fill = "lightblue") + 
+   geom_text(aes(label = n), vjust = -0.5, size = 3) +
+   theme_classic() +
+   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+jt_plot
+```
+
 -   Job Description
 
 When we look at the job description column,
@@ -768,7 +863,7 @@ We have so many different values but we can differentiate them into other column
 First, we need to look the job description column in a detailed way.
 
 ```{r}
-view(Uncleaned_DS_jobs$Job_Description)
+head(Uncleaned_DS_jobs$Job_Description,1)
 ```
 
 We see some common requirements and common job descriptions for jobs.
