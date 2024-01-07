@@ -72,7 +72,7 @@ Let's investigate the columns one by one:
 
 -   Index
 
-    Index column is not necessary for us, so we will remove it from our data set.
+Index column is not necessary for us, so we will remove it from our data set.
 
 ```{r}
 Uncleaned_DS_jobs$index <- NULL
@@ -90,30 +90,11 @@ To fix this, first we need to look how many data are there with Rating = -1:
 sum(Uncleaned_DS_jobs$Rating == -1)
 ```
 
-We have 50 values with Rating = -1.
-
-And after looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them
-
-```{r}
-sum(Uncleaned_DS_jobs$Founded == -1)
-
-```
-
-And we can look how many rows have -1 foundation year and -1 rating:
-
-```{r}
-sum(Uncleaned_DS_jobs$Founded == -1 & Uncleaned_DS_jobs$Rating == -1)
-```
-
-Foundation year and rating variable should not be -1.
-
-So firstly for the rating variable we give change -1 to 0.
+We have 50 values with Rating = -1. Rating variable should not be -1. So firstly for the rating variable we give change -1 to 0.
 
 ```{r}
 
 Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- 0
-Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
-
 ```
 
 Now lets check if it worked,
@@ -126,8 +107,18 @@ As can be seen from the summary of the rating we fix the -1 problem.
 
 -   Founded
 
+After looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them:
+
 ```{r}
-summary(Uncleaned_DS_jobs$Founded)
+sum(Uncleaned_DS_jobs$Founded == -1)
+```
+
+```{r}
+Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
+```
+
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Founded), maxsum = 6)
 ```
 
 From the summary we also fix the problem for Founded.
