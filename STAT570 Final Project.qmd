@@ -73,7 +73,7 @@ Let's investigate the columns one by one:
 
 -   Index
 
-    Index column is not necessary for us, so we will remove it from our data set.
+Index column is not necessary for us, so we will remove it from our data set.
 
 ```{r}
 Uncleaned_DS_jobs$index <- NULL
@@ -91,30 +91,11 @@ To fix this, first we need to look how many data are there with Rating = -1:
 sum(Uncleaned_DS_jobs$Rating == -1)
 ```
 
-We have 50 values with Rating = -1.
-
-And after looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them
-
-```{r}
-sum(Uncleaned_DS_jobs$Founded == -1)
-
-```
-
-And we can look how many rows have -1 foundation year and -1 rating:
-
-```{r}
-sum(Uncleaned_DS_jobs$Founded == -1 & Uncleaned_DS_jobs$Rating == -1)
-```
-
-Foundation year and rating variable should not be -1.
-
-So firstly for the rating variable we give change -1 to 0.
+We have 50 values with Rating = -1. Rating variable should not be -1. So firstly for the rating variable we give change -1 to 0.
 
 ```{r}
 
 Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- 0
-Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
-
 ```
 
 Now lets check if it worked,
@@ -145,8 +126,18 @@ rating_histogram
 
 -   Founded
 
+After looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them:
+
 ```{r}
-summary(Uncleaned_DS_jobs$Founded)
+sum(Uncleaned_DS_jobs$Founded == -1)
+```
+
+```{r}
+Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
+```
+
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Founded), maxsum = 6)
 ```
 
 From the summary we also fix the problem for Founded.
@@ -379,18 +370,9 @@ Let's see the location variable first.
 summary(as.factor(Uncleaned_DS_jobs$Location), maxsum = 6)
 ```
 
-In the Location variable, we can see that they are written with the state which they are in. So we want to separate them. For this, we can use `separate_wider_delim()` function.
+In the Location variable, we can see that they are written with the state which they are in. So we want to separate them. But,before that, in our data there are some problematic rows:
 
-But, we receive an error here.
-
-```         
-Error in `separate_wider_delim()`: ! 
-Expected 2 pieces in each element of `Location`. ! 
-672 values were too short. ℹ Use `too_few = "debug"` to diagnose the problem.
-ℹ Use `too_few = "align_start"/"align_end"` to silence this message.
-```
-
-From the error, we can see that some rows are too short. Let's see that columns:
+Some rows are too short. Let's see that columns:
 
 ```{r}
 Uncleaned_DS_jobs %>% 
@@ -409,17 +391,26 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
     Location = case_when(
       Location == "Remote" ~ str_replace(Location, "Remote", "Remote, R"),
       Location == "United States" ~ str_replace(Location, "United States", "United States, US"),
-      Location == "Utah" ~ str_replace(Location, "Utah", "Utah, Utah"),
-      Location == "New Jersey" ~ str_replace(Location, "New Jersey", "New Jersey, New Jersey"),
-      Location == "Texas" ~ str_replace(Location, "Texas", "Texas, Texas"),
-      Location == "California" ~ str_replace(Location, "California", "California, California"),
+      Location == "Utah" ~ str_replace(Location, "Utah", "Utah, UT"),
+      Location == "New Jersey" ~ str_replace(Location, "New Jersey", "New Jersey, NJ"),
+      Location == "Texas" ~ str_replace(Location, "Texas", "Texas, TX"),
+      Location == "California" ~ str_replace(Location, "California", "California, CA"),
       Location == "Patuxent, Anne Arundel, MD" ~ str_replace(Location, "Patuxent, Anne Arundel, MD", "Anne Arundel, MD"),
       TRUE ~ Location
     )
   )
 ```
 
-Let's check them again:
+Now we can separate them:
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
+  separate(
+    Location,
+    into = c("Location", "Location_State"),
+    sep = ",\\s+")
+  
+```
 
 -   Headquarters
 
@@ -432,7 +423,56 @@ sum(Uncleaned_DS_jobs$Headquarters == -1)
 
 ```{r}
 Uncleaned_DS_jobs$Headquarters[Uncleaned_DS_jobs$Headquarters == "-1"] <- "No information"
+```
 
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Headquarters), maxsum = 6)
+```
+
+Similar to Location, we want to separate the states and the city. We will apply the similar approach to fix this column.
+
+```{r}
+Uncleaned_DS_jobs %>% 
+  filter(
+    str_count(Headquarters, ",\\s+") != 1
+    ) %>% 
+  select(Location) %>% distinct_all()
+```
+
+We will assign the states for this rows too. and also to not get a warning regarding the NA values later, "No Information" is also going to be fixed:
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
+  mutate(
+    Headquarters = case_when(
+      Headquarters == "Hauppauge" ~ str_replace(Headquarters, "Hauppauge", "Hauppauge, NY"),
+      Headquarters == "Reston" ~ str_replace(Headquarters, "Reston", "Reston, VA"),
+      Headquarters == "New York" ~ str_replace(Headquarters, "New York", "New York, NY"),
+      Headquarters == "Palo Alto" ~ str_replace(Headquarters, "Palo Alto", "Palo Alto, CA"),
+      Headquarters == "San Francisco" ~ str_replace(Headquarters, "San Francisco", "San Francisco, CA"),
+      Headquarters == "Brooklyn" ~ str_replace(Headquarters, "Brooklyn", "Brooklyn, NY"),
+      Headquarters == "Sterling" ~ str_replace(Headquarters, "Sterling", "Sterling, IL"),
+      Headquarters == "Chantilly" ~ str_replace(Headquarters, "Chantilly", "Chantilly, VA"),
+      Headquarters == "Cambridge" ~ str_replace(Headquarters, "Cambridge", "Cambridge, MA"),
+      Headquarters == "Fort Belvoir" ~ str_replace(Headquarters, "Fort Belvoir", "Fort Belvoir, VA"),
+      Headquarters == "Naperville" ~ str_replace(Headquarters, "Naperville", "Naperville, IL"),
+      Headquarters == "Redmond" ~ str_replace(Headquarters, "Redmond", "Redmond, WA"),
+      Headquarters == "Irwindale" ~ str_replace(Headquarters, "Irwindale", "Irwindale, CA"),
+      Headquarters == "No information" ~ str_replace(Headquarters, "No information", "No information, No information"),
+      TRUE ~ Headquarters
+    )
+  )
+```
+
+And finally, we will separate the Headquarters and their states:
+
+```{r}
+Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
+  separate(
+    Headquarters,
+    into = c("Headquarters", "Headquarters_State"),
+    sep = ",\\s+")
+  
 ```
 
 -   Type Of Ownership
