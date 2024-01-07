@@ -28,6 +28,7 @@ Let's start by importing the data. Fist, import the required libraries. If you d
 
 library(tidyverse)
 library(readr)
+library(ggplot2)
 
 Uncleaned_DS_jobs <- read_csv("Uncleaned_DS_jobs.csv")
 ```
@@ -58,7 +59,7 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
          Type_of_Ownership =  `Type of ownership`)
 ```
 
-Take a summary again to see the data:
+Take a summary again to see the data:\
 
 ```{r}
 summary(Uncleaned_DS_jobs)
@@ -124,6 +125,24 @@ summary(Uncleaned_DS_jobs$Rating)
 
 As can be seen from the summary of the rating we fix the -1 problem.
 
+Histogram of the rating variable:
+
+```{r}
+intervals <- seq(0, 5, by = 1)
+
+rating_histogram <- ggplot(Uncleaned_DS_jobs, aes(x = Rating)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, col = "darkblue", fill = "lightblue") +
+  labs(
+    title = "Distribution of Rating",
+    x = "Rating",
+    y = "Frequency",
+    subtitle = ""
+  ) +
+  scale_x_continuous(breaks = intervals) +  
+  theme_classic()
+rating_histogram
+```
+
 -   Founded
 
 ```{r}
@@ -131,6 +150,10 @@ summary(Uncleaned_DS_jobs$Founded)
 ```
 
 From the summary we also fix the problem for Founded.
+
+```{r}
+
+```
 
 -   Sector
 
@@ -147,6 +170,18 @@ We change -1 values to no information for the sector variable.
 Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
 ```
 
+Histogram of the Sector Variable:
+
+```{r}
+sector_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Sector)) + 
+  labs(title = "Distribution of Sector", x = "Sector", subtitle = "") + 
+  geom_bar(colour="darkblue", fill="lightblue") + 
+  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.68) +
+  theme_classic()+
+   theme(axis.text.x = element_text(size = 8.5, angle = 45, hjust = 1))
+sector_plot
+```
+
 -   Industry
 
 ```{r}
@@ -157,6 +192,46 @@ We see that industry has 71 -1 values so, again we assign those values to no inf
 
 ```{r}
 Uncleaned_DS_jobs$Industry[Uncleaned_DS_jobs$Industry == -1] <- "No information"
+```
+
+Histogram of the Industry Variable:
+
+```{r}
+industry_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Industry)) + 
+  labs(title = "Distribution of Industry", x = "Industry", subtitle = "") + 
+  geom_bar(colour="darkblue", fill="lightblue") + 
+  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.68) +
+  theme_classic()+
+   theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))
+industry_plot
+```
+
+As can be seen from the graph it is hard to read the x axis names so to solve this problem, we picked the 10 industries that have the most frequencies in the data and draw a plot regarding these industries.
+
+```{r}
+top10_industries <- Uncleaned_DS_jobs %>%
+  group_by(Industry) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(10)
+
+# Reorder the levels of Industry based on frequency
+plot_data <-  Uncleaned_DS_jobs
+plot_data$Industry <- factor(plot_data$Industry, levels = top10_industries$Industry)
+
+# Filter data to include only the top 10 industries
+filtered_data <- plot_data %>%
+  filter(Industry %in% top10_industries$Industry)
+
+industry_plot_top10 <- ggplot(filtered_data, aes(x = Industry)) +
+  labs(title = "Distribution of Top 10 Industries", x = "Industry", subtitle = "") +
+  geom_bar(colour = "darkblue", fill = "lightblue") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))
+
+
+industry_plot_top10
 ```
 
 -   Revenue
@@ -177,6 +252,19 @@ We convert -1 to that value.
 
 ```{r}
 Uncleaned_DS_jobs$Revenue[Uncleaned_DS_jobs$Revenue == -1] <- "Unknown / Non-Applicable"  
+```
+
+Histogram of the Revenue variable:
+
+```{r}
+revenue_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Revenue)) + 
+  labs(title = "Distribution of Revenue", x = "Revenue", subtitle = "") + 
+  geom_bar(colour="darkblue", fill="lightblue") + 
+  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.2) +
+  theme_classic()+
+   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+revenue_plot
+
 ```
 
 -   Company Name
@@ -208,6 +296,37 @@ Uncleaned_DS_jobs |>
 
 We can see that the company with the most positions opened is "Hatch Data Inc" and "Maxar Technologies" with 12 positions opened.
 
+Histogram of the Company name:
+
+Same problem occurred here like industries so, to see the plot again the 10 company names with the highest frequencies.
+
+Histogram of the company name:
+
+```{r}
+top10_companies <- Uncleaned_DS_jobs %>%
+  group_by(Company_Name) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(10)
+
+# Reorder the levels of Company names based on frequency
+plot_data <-  Uncleaned_DS_jobs
+plot_data$Company_Name <- factor(plot_data$Company_Name, levels = top10_companies$Company_Name)
+
+# Filter data to include only the top 10 industries
+filtered_data <- plot_data %>%
+  filter(Company_Name %in% top10_companies$Company_Name)
+
+company_plot_top10 <- ggplot(filtered_data, aes(x = Company_Name)) +
+  labs(title = "Distribution of Top 10 Companies", x = "Companu Name", subtitle = "") +
+  geom_bar(colour = "darkblue", fill = "lightblue") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))
+
+company_plot_top10
+```
+
 -   Size
 
 As can be seen from the summary that we have -1 for the Size. But we have unknown category for this variable.
@@ -224,6 +343,18 @@ Uncleaned_DS_jobs$Size[Uncleaned_DS_jobs$Size == -1] <- "Unknown"
 
 ```{r}
 summary(as.factor(Uncleaned_DS_jobs$Size))
+```
+
+Histogram of the Size variable:
+
+```{r}
+size_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Size)) + 
+  labs(title = "Distribution of Size", x = "Size", subtitle = "") + 
+  geom_bar(colour="darkblue", fill="lightblue") + 
+  geom_text(stat='count', aes(label=..count..), vjust=-0.5,size=2.2) +
+  theme_classic()+
+   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+size_plot
 ```
 
 -   Competitors
