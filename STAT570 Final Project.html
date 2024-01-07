@@ -452,33 +452,46 @@ Los Alamos National Laboratory, Battelle, SRI International
 </div>
 </div>
 <p>In the Location variable, we can see that they are written with the state which they are in. So we want to separate them. For this, we can use <code>separate_wider_delim()</code> function.</p>
+<p>But, we receive an error here.</p>
+<p><img src="images/error.PNG" class="img-fluid"></p>
+<p>From the error, we can see that some rows are too short. Let’s see that columns:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncleaned_DS_jobs |&gt; separate_wider_delim( Location,delim = ",\\s+",names = c("Location", "Location_State"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>But, we receive an error here. From the error, we can see that some rows are too short. Let’s see that columns:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="sc">%&gt;%</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_count</span>(Location, <span class="st">",</span><span class="sc">\\</span><span class="st">s+"</span>) <span class="sc">!=</span> <span class="dv">1</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Location)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_count</span>(Location, <span class="st">",</span><span class="sc">\\</span><span class="st">s+"</span>) <span class="sc">!=</span> <span class="dv">1</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Location) <span class="sc">%&gt;%</span> <span class="fu">distinct_all</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 24 × 1
-   Location     
-   &lt;chr&gt;        
- 1 Remote       
- 2 United States
- 3 Remote       
- 4 United States
- 5 Utah         
- 6 New Jersey   
- 7 Remote       
- 8 Remote       
- 9 Remote       
-10 United States
-# ℹ 14 more rows</code></pre>
+<pre><code># A tibble: 7 × 1
+  Location                  
+  &lt;chr&gt;                     
+1 Remote                    
+2 United States             
+3 Utah                      
+4 New Jersey                
+5 Texas                     
+6 Patuxent, Anne Arundel, MD
+7 California                </code></pre>
 </div>
 </div>
+<p>From this output, we can see that we have “Remote”, “United States”, locations that have the same names as their states; “Utah”, “New Jersey”, “Texas” and “California”, and “Patuxent, Anne Arundel, MD” which is a region for the Anne Arundel county. So, we will add information for this columns firstly, then we will separate the Location and States. For this, we will use <code>str_replace()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define replacements using case_when</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Location =</span> <span class="fu">case_when</span>(</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"Remote"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"Remote"</span>, <span class="st">"Remote, Remote"</span>),</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"United States"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"United States"</span>, <span class="st">"United States, United States"</span>),</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"Utah"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"Utah"</span>, <span class="st">"Utah, Utah"</span>),</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"New Jersey"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"New Jersey"</span>, <span class="st">"New Jersey, New Jersey"</span>),</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"Texas"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"Texas"</span>, <span class="st">"Texas, Texas"</span>),</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"California"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"California"</span>, <span class="st">"California, California"</span>),</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>      Location <span class="sc">==</span> <span class="st">"Patuxent, Anne Arundel, MD"</span> <span class="sc">~</span> <span class="fu">str_replace</span>(Location, <span class="st">"Patuxent, Anne Arundel, MD"</span>, <span class="st">"Anne Arundel, MD"</span>),</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> Location</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s check them again:</p>
 <ul>
 <li>Headquarters</li>
 </ul>
