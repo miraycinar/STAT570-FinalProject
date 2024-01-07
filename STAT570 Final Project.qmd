@@ -5,7 +5,6 @@ author: "Miray Çınar & Ecenaz Tunç"
 format: html
 editor: visual
 toc: true
-code-fold: "show"
 highlight-style: "breeze"
 eval: true
 echo: true
@@ -46,7 +45,7 @@ And also take a quick summary:
 summary(Uncleaned_DS_jobs)
 ```
 
-From both `glimpse()` and `summary()` outputs, we can see that, categorical variables are in character form so we have to change them into factor variables.
+From both `glimpse()` and `summary()` outputs, we can see that, categorical variables are in character form. We will investigate them one by one later on.
 
 But first, let's change the column names that have blank spaces so that it will be much easy to make the analyses later.
 
@@ -59,53 +58,39 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
          Type_of_Ownership =  `Type of ownership`)
 ```
 
-Now that we have clean names for our columns, we can transform characters into factors.
-
-```{r}
-# Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>% 
-  #mutate(Job_Title = as.factor(Job_Title),
-   #      Salary_Estimate = as.factor(Salary_Estimate),
-    #     Company_Name = as.factor(Company_Name), 
-     #    Location = as.factor(Location), 
-      #   Headquarters = as.factor(Headquarters),
-       #  Size = as.factor(Size), 
-        # Type_of_Ownership = as.factor(Type_of_Ownership), 
-         #Industry = as.factor(Industry),
-         #Sector = as.factor(Sector), 
-         #Revenue = as.factor(Revenue), 
-         #Competitors = as.factor(Competitors)) 
-```
-
 Take a summary again to see the data:
 
 ```{r}
 summary(Uncleaned_DS_jobs)
 ```
 
-From our summary, we can see some strange values are present in the data. For instance there are some rows marked as "-1" in the Headquarters, Founded, Type_of_Ownership, Industry, Sector and Competitors columns.
+From our summary, we can also see some strange values are present in the data. For instance there are some rows marked as "-1" in the Headquarters, Founded.
 
-Let's see if this are the same rows or not:
+## Investigating the Columns
+
+Let's investigate the columns one by one:
+
+-   Index
+
+    Index column is not necessary for us, so we will remove it from our data set.
 
 ```{r}
-Uncleaned_DS_jobs[Uncleaned_DS_jobs$Headquarters == '-1',]
+Uncleaned_DS_jobs$index <- NULL
 ```
 
-We realized that from the summary function rating has a minimum value as -1 but this is not right, with the view function we see that are some -1 for the rating.
+-   Rating
 
-```{r}
-view(Uncleaned_DS_jobs)
-
-```
+We realized that from the summary, Rating has a minimum value as -1, but the rating should be between 1 to 5.
 
 We need to fix that problem.
 
-To fix this, first we need to look how many data are there with rating -1
+To fix this, first we need to look how many data are there with Rating = -1:
 
 ```{r}
 sum(Uncleaned_DS_jobs$Rating == -1)
 ```
 
-We have 50 values with ratings -1.
+We have 50 values with Rating = -1.
 
 And after looking in a more detailed way, we realize that the foundation year of the companies have a value -1 also we need check for them
 
@@ -114,13 +99,15 @@ sum(Uncleaned_DS_jobs$Founded == -1)
 
 ```
 
-And we can look how many rows have -1 foundation year and -1 rating
+And we can look how many rows have -1 foundation year and -1 rating:
 
 ```{r}
 sum(Uncleaned_DS_jobs$Founded == -1 & Uncleaned_DS_jobs$Rating == -1)
 ```
 
-Foundation year and rating variable should not be -1. So firstly for the rating variable we give change -1 to 0.
+Foundation year and rating variable should not be -1.
+
+So firstly for the rating variable we give change -1 to 0.
 
 ```{r}
 
@@ -128,8 +115,6 @@ Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- 0
 Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- NA
 
 ```
-
-Now we can use mean imputation method:
 
 Now lets check if it worked,
 
@@ -139,7 +124,9 @@ summary(Uncleaned_DS_jobs$Rating)
 
 As can be seen from the summary of the rating we fix the -1 problem.
 
-And we can do this same process the founded variable
+-   Founded
+
+And we can do this same process the Founded variable. We can use mean imputation method:
 
 ```{r}
 founded_mean <- mean(Uncleaned_DS_jobs$Founded, na.rm = TRUE)
@@ -150,37 +137,98 @@ Uncleaned_DS_jobs$Founded[is.na(Uncleaned_DS_jobs$Founded)] <- founded_mean
 summary(Uncleaned_DS_jobs$Founded)
 ```
 
-From the summary we also fix the problem for founded.
+From the summary we also fix the problem for Founded.
 
-As can be seen from the summary that we have -1 for the size. But we have unknown category for this variable.
+-   Company Name
+
+When we check the Company Name variable, we see that it also has the Rating next to it:
 
 ```{r}
-summary(Uncleaned_DS_jobs$Size)
+head(Uncleaned_DS_jobs[, c("Company_Name", "Rating")])
 ```
 
-So we can assign -1 to unknown category for this variable
+We can separate them and get rid of the Rating variable inside of Company Name to clean this variable. We can do this by `str_replace()` function.
+
+```{r}
+Uncleaned_DS_jobs$Company_Name <- str_replace(Uncleaned_DS_jobs$Company_Name, "\n[0-9.]+$", "")
+```
+
+Now we have cleaned the Company Name variable:
+
+```{r}
+head(Uncleaned_DS_jobs[, c("Company_Name", "Rating")])
+```
+
+And we can see that how many of the Company Names:
+
+```{r}
+Uncleaned_DS_jobs |> 
+  count(Company_Name, sort = TRUE)
+```
+
+We can see that the company with the most positions opened is "Hatch Data Inc" and "Maxar Technologies" with 12 positions opened.
+
+-   Size
+
+As can be seen from the summary that we have -1 for the Size. But we have unknown category for this variable.
+
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Size))
+```
+
+So we can assign "-1" to "Unknown" category for this variable:
 
 ```{r}
 Uncleaned_DS_jobs$Size[Uncleaned_DS_jobs$Size == -1] <- "Unknown"
 ```
 
 ```{r}
-summary(Uncleaned_DS_jobs$Size)
+summary(as.factor(Uncleaned_DS_jobs$Size))
 ```
 
-There are -1 values in competitors. We don't know their competitors' name so we can attribute them to no information
+-   Competitors
+
+There are -1 values in Competitors. We don't know their competitors' name so we can attribute them to no information
 
 ```{r}
-Uncleaned_DS_jobs$Competitors <- as.character(Uncleaned_DS_jobs$Competitors)
-
 
 Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Competitors == "-1"] <- "No information"
 
 ```
 
 ```{r}
-summary(Uncleaned_DS_jobs$Competitors)
+summary(as.factor(Uncleaned_DS_jobs$Competitors), maxsum = 6)
 ```
+
+-   Location
+
+Let's see the location variable first.
+
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Location), maxsum = 6)
+```
+
+In the Location variable, we can see that they are written with the state which they are in. So we want to separate them. For this, we can use `separate_wider_delim()` function.
+
+```{r}
+# Uncleaned_DS_jobs |> separate_wider_delim( Location,delim = ",\\s+",names = c("Location", "Location_State"))
+```
+
+But, we receive an error here. From the error, we can see that some rows are too short. Let's see that columns:
+
+```{r}
+Uncleaned_DS_jobs %>% 
+  filter(
+    str_count(Location, ",\\s+") != 1
+    ) %>% 
+  select(Location)
+```
+
+```{r}
+
+```
+
+-   Headquarters
 
 For the headquarters we have -1 values also,
 
@@ -190,14 +238,13 @@ sum(Uncleaned_DS_jobs$Headquarters == -1)
 ```
 
 ```{r}
-Uncleaned_DS_jobs$Headquarters<- as.character(Uncleaned_DS_jobs$Headquarters)
-
-
 Uncleaned_DS_jobs$Headquarters[Uncleaned_DS_jobs$Headquarters == "-1"] <- "No information"
 
 ```
 
-Also, there are -1 values in the type of ownership.
+-   Type Of Ownership
+
+There are -1 values in the Type of Ownership also.
 
 We check how many -1 values are in the variable.
 
@@ -206,16 +253,14 @@ sum(Uncleaned_DS_jobs$Type_of_Ownership == -1)
 ```
 
 ```{r}
-Uncleaned_DS_jobs$Type_of_Ownership <- as.character(Uncleaned_DS_jobs$Type_of_Ownership)
-
-
 Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Type_of_Ownership == "-1"] <- "No information"
-
 ```
 
-## Investigating the Columns
+Let's see the summary:
 
-Let's investigate the columns one by one:
+```{r}
+summary(as.factor(Uncleaned_DS_jobs$Type_of_Ownership))
+```
 
 -   Salary Estimation
 
@@ -236,7 +281,7 @@ From this output, we can see that we have common shape for the salary estimates 
 Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- Uncleaned_DS_jobs$Salary_Estimate
 
 Uncleaned_DS_jobs$Salary_Estimate_wo_spaces <- gsub(" ", "",Uncleaned_DS_jobs$Salary_Estimate)  
-# Display the updated dataframe 
+# Display the updated data frame 
 head(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces) 
 ```
 
@@ -288,21 +333,26 @@ Uncleaned_DS_jobs <- Uncleaned_DS_jobs |>
 By using `separate_wider_regex()` function, we defined the pattern in the data, and we got the new columns as Low_Limit_For_Salary and High_Limit_For_Salary as we wished.
 
 ```{r}
-head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
+head(Uncleaned_DS_jobs[c("Salary_Estimate",
+                         "Low_Limit_For_Salary", 
+                         "High_Limit_For_Salary")])
 ```
 
 For not confusing the numbers later, lets multiply the low limit and high limit numbers with 1000 and make Salary Estimate factor.
 
 ```{r}
 Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%  
-  mutate(Low_Limit_For_Salary = as.numeric(Low_Limit_For_Salary)*1000,
-         High_Limit_For_Salary = as.numeric(High_Limit_For_Salary)*1000)
+  mutate(
+    Low_Limit_For_Salary = as.numeric(Low_Limit_For_Salary)*1000,
+    High_Limit_For_Salary = as.numeric(High_Limit_For_Salary)*1000)
 ```
 
 ```{r}
 Uncleaned_DS_jobs$Salary_Estimate <- as.factor(Uncleaned_DS_jobs$Salary_Estimate)
 
-head(Uncleaned_DS_jobs[c("Salary_Estimate","Low_Limit_For_Salary", "High_Limit_For_Salary")])
+head(Uncleaned_DS_jobs[c("Salary_Estimate",
+                         "Low_Limit_For_Salary", 
+                         "High_Limit_For_Salary")])
 ```
 
 -   Job Title
@@ -340,7 +390,7 @@ By using `str_detect()` function, we can detect the rows including "Senior", "Sr
 By using `as.integer()` , we assign 1 to exists and 0 to nonexistent.
 
 ```{r}
-Uncleaned_DS_jobs$SeniorPosition <- as.integer(
+Uncleaned_DS_jobs$Senior_Position <- as.integer(
   str_detect(Uncleaned_DS_jobs$Job_Title, 
              regex("^(Senior|Sr|Experienced)")
              ) )
@@ -494,11 +544,11 @@ For this we can separate the columns like SQL and we can say that this jobs want
 
 Let's start with SQL:
 
-In this we should check if SQL is mentioned in the variable job description
+In this we should check if SQL is mentioned in the variable Job_Description
 
 ```{r}
 sql_mentioned <- function(description) {
-  # We use tolower to match the sql in the job description
+  # We use tolower to match the SQL in the job description
   description <- tolower(description)
   
   # Check if SQL is mentioned
@@ -512,7 +562,7 @@ sql_mentioned <- function(description) {
 
 ```
 
-Now we need to create a column called SQL, in this column wee see if SQLis a requirement in the job description or not.
+Now we need to create a column called SQL, in this column we will see if SQL is a requirement in the job description or not.
 
 ```{r}
 Uncleaned_DS_jobs$sql_needed <- sapply(Uncleaned_DS_jobs$Job_Description, sql_mentioned)
@@ -522,15 +572,7 @@ Uncleaned_DS_jobs$sql_needed <- sapply(Uncleaned_DS_jobs$Job_Description, sql_me
 Uncleaned_DS_jobs$sql_needed <- as.factor(Uncleaned_DS_jobs$sql_needed)
 ```
 
-Let's check the summary of the new column and the data set:
-
-```{r}
-summary(Uncleaned_DS_jobs)
-summary(Uncleaned_DS_jobs$sql_needed)
-
-```
-
-Now for python we repeat the same process.
+Now for Python we repeat the same process.
 
 ```{r}
 python_mentioned <- function(description) {
@@ -552,11 +594,6 @@ Uncleaned_DS_jobs$python_needed <- sapply(Uncleaned_DS_jobs$Job_Description, pyt
 
 ```{r}
 Uncleaned_DS_jobs$python_needed <- as.factor(Uncleaned_DS_jobs$python_needed)
-```
-
-```{r}
-summary(Uncleaned_DS_jobs)
-summary(Uncleaned_DS_jobs$sql_needed)
 ```
 
 Now for Excel:
@@ -585,11 +622,6 @@ summary(Uncleaned_DS_jobs$excel_needed)
 
 ```{r}
 Uncleaned_DS_jobs$excel_needed <- as.factor(Uncleaned_DS_jobs$excel_needed)
-```
-
-```{r}
-summary(Uncleaned_DS_jobs)
-summary(Uncleaned_DS_jobs$excel_needed)
 ```
 
 For Hadoop:
@@ -622,11 +654,7 @@ summary(Uncleaned_DS_jobs$hadoop_needed)
 Uncleaned_DS_jobs$hadoop_needed<- as.factor(Uncleaned_DS_jobs$hadoop_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-SPARK
+For Spark:
 
 ```{r}
 spark_mentioned <- function(description) {
@@ -654,11 +682,7 @@ summary(Uncleaned_DS_jobs$spark_needed)
 Uncleaned_DS_jobs$spark_needed <- as.factor(Uncleaned_DS_jobs$spark_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-AWS
+For AWS:
 
 ```{r}
 aws_mentioned <- function(description) {
@@ -687,11 +711,7 @@ summary(Uncleaned_DS_jobs$aws_needed)
 Uncleaned_DS_jobs$aws_needed <- as.factor(Uncleaned_DS_jobs$aws_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-TABLEAU
+For Tableau:
 
 ```{r}
 tableau_mentioned <- function(description) {
@@ -719,11 +739,7 @@ summary(Uncleaned_DS_jobs$tableau_needed)
 Uncleaned_DS_jobs$tableau_needed <- as.factor(Uncleaned_DS_jobs$tableau_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-BIG_DATA
+For Big Data:
 
 ```{r}
 bigdata_mentioned <- function(description) {
@@ -752,11 +768,7 @@ summary(Uncleaned_DS_jobs$bigdata_needed)
 Uncleaned_DS_jobs$bigdata_needed<- as.factor(Uncleaned_DS_jobs$bigdata_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-NUMPY
+For Numpy:
 
 ```{r}
 numpy_mentioned <- function(description) {
@@ -784,7 +796,7 @@ summary(Uncleaned_DS_jobs$numpy_needed)
 Uncleaned_DS_jobs$numpy_needed <- as.factor(Uncleaned_DS_jobs$numpy_needed)
 ```
 
-MACHINE LEARNING
+For Machine Learning:
 
 ```{r}
 ML_mentioned <- function(description) {
@@ -812,11 +824,7 @@ summary(Uncleaned_DS_jobs$ML_needed)
 Uncleaned_DS_jobs$ML_needed<- as.factor(Uncleaned_DS_jobs$ML_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-DEEP LEARNING
+For Deep Learning:
 
 ```{r}
 DL_mentioned <- function(description) {
@@ -844,11 +852,7 @@ summary(Uncleaned_DS_jobs$DL_needed)
 Uncleaned_DS_jobs$DL_needed <- as.factor(Uncleaned_DS_jobs$DL_needed)
 ```
 
-```{r}
-summary(Uncleaned_DS_jobs)
-```
-
-STATISTICS
+For Statistics:
 
 ```{r}
 stat_mentioned <- function(description) {
@@ -876,6 +880,8 @@ summary(Uncleaned_DS_jobs$stat_needed)
 Uncleaned_DS_jobs$stat_needed <- as.factor(Uncleaned_DS_jobs$stat_needed)
 ```
 
+Now Let's check the new columns in our dataset:
+
 ```{r}
 summary(Uncleaned_DS_jobs)
 ```
@@ -883,6 +889,8 @@ summary(Uncleaned_DS_jobs)
 ## References
 
 Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research_cycle/03_tidyr.html>
+
+Cotton, R. (2023, February 16). *Quarto cheat sheet (previously known as RMarkdown)*. DataCamp. <https://www.datacamp.com/cheat-sheet/quarto-cheat-sheet-previously-known-as-r-markdown>
 
 *GREP: Pattern matching and replacement*. RDocumentation. (n.d.). <https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep>
 
