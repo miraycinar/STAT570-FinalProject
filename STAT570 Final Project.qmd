@@ -112,7 +112,7 @@ So firstly for the rating variable we give change -1 to 0.
 ```{r}
 
 Uncleaned_DS_jobs$Rating[Uncleaned_DS_jobs$Rating == -1] <- 0
-Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- NA
+Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
 
 ```
 
@@ -126,18 +126,58 @@ As can be seen from the summary of the rating we fix the -1 problem.
 
 -   Founded
 
-And we can do this same process the Founded variable. We can use mean imputation method:
-
-```{r}
-founded_mean <- mean(Uncleaned_DS_jobs$Founded, na.rm = TRUE)
-Uncleaned_DS_jobs$Founded[is.na(Uncleaned_DS_jobs$Founded)] <- founded_mean
-```
-
 ```{r}
 summary(Uncleaned_DS_jobs$Founded)
 ```
 
 From the summary we also fix the problem for Founded.
+
+-   Sector
+
+Realizing that sector variable also has -1 values.
+
+```{r}
+sum(Uncleaned_DS_jobs$Sector == -1)
+
+```
+
+We change -1 values to no information for the sector variable.
+
+```{r}
+Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
+```
+
+-   Industry
+
+```{r}
+sum(Uncleaned_DS_jobs$Industry == -1)
+```
+
+We see that industry has 71 -1 values so, again we assign those values to no information.
+
+```{r}
+Uncleaned_DS_jobs$Industry[Uncleaned_DS_jobs$Industry == -1] <- "No information"
+```
+
+-   Revenue
+
+In revenue column there are some -1 values
+
+```{r}
+sum(Uncleaned_DS_jobs$Revenue == -1)
+```
+
+And this column has a value called Unknown / Non-Applicable
+
+```{r}
+head(Uncleaned_DS_jobs$Revenue)
+```
+
+We convert -1 to that value.
+
+```{r}
+Uncleaned_DS_jobs$Revenue[Uncleaned_DS_jobs$Revenue == -1] <- "Unknown / Non-Applicable"  
+```
 
 -   Company Name
 
