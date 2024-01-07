@@ -14,11 +14,37 @@ bibliography: references.bib
 
 ## Introduction
 
-\-\-\--
+Glassdoor is an online platform where former or new employees can comment on companies and is also used for job search.
+
+In their website, they define themselves as: "Glassdoor is one of the world's largest job and recruiting sites. We pride ourselves on helping people find a job and company they love; in fact, it's our mission. Our company was built on the foundation of increasing workplace transparency. With that in mind, we have developed numerous tools to help job seekers make more informed career decisions."
 
 ## Data Description
 
-\-\-\--
+Data is obtained from Kaggle, in which, the user claims that the data is obtained from Glassdoor.com by using web scrapping.
+
+The variables in this data set are defined as follows:
+
+**Job Title:** Title of the job posting
+
+**Salary Estimation:** Salary range for that particular job
+
+**Job Description:** This contains the full description of that job
+
+**Rating:** Rating of that post
+
+**Company:** Name of company
+
+**Location:** Location of the company
+
+**Headquarter:** Location of the headquater
+
+**Size:** Total employee in that company
+
+**Type of ownership:** Describes the company type i.e non-profit/public/private farm etc
+
+**Industry, Sector:** Field applicant will work in
+
+**Revenue:** Total revenue of the company
 
 ## Import the Data
 
@@ -1215,6 +1241,8 @@ summary(Uncleaned_DS_jobs)
 ```
 
 ## References
+
+About us \| glassdoor. (n.d.). <https://www.glassdoor.com/about/>
 
 Barr, D., & DeBruine, L. (n.d.). Data Cleaning. <https://rgup.gitlab.io/research_cycle/03_tidyr.html>
 
