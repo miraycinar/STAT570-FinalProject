@@ -252,7 +252,12 @@ In the Location variable, we can see that they are written with the state which 
 
 But, we receive an error here.
 
-![](images/error.PNG)
+```         
+Error in `separate_wider_delim()`: ! 
+Expected 2 pieces in each element of `Location`. ! 
+672 values were too short. ℹ Use `too_few = "debug"` to diagnose the problem.
+ℹ Use `too_few = "align_start"/"align_end"` to silence this message.
+```
 
 From the error, we can see that some rows are too short. Let's see that columns:
 
@@ -271,8 +276,8 @@ From this output, we can see that we have "Remote", "United States", locations t
 Uncleaned_DS_jobs <- Uncleaned_DS_jobs %>%
   mutate(
     Location = case_when(
-      Location == "Remote" ~ str_replace(Location, "Remote", "Remote, Remote"),
-      Location == "United States" ~ str_replace(Location, "United States", "United States, United States"),
+      Location == "Remote" ~ str_replace(Location, "Remote", "Remote, R"),
+      Location == "United States" ~ str_replace(Location, "United States", "United States, US"),
       Location == "Utah" ~ str_replace(Location, "Utah", "Utah, Utah"),
       Location == "New Jersey" ~ str_replace(Location, "New Jersey", "New Jersey, New Jersey"),
       Location == "Texas" ~ str_replace(Location, "Texas", "Texas, Texas"),
