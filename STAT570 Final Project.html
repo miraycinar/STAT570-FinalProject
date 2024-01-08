@@ -375,46 +375,27 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 </div>
 <p>From the summary we also fix the problem for Founded.</p>
 <ul>
-<li>Sector</li>
+<li>Industry</li>
 </ul>
-<p>Realizing that sector variable also has -1 values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Sector <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Industry <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 71</code></pre>
 </div>
 </div>
-<p>We change -1 values to no information for the sector variable.</p>
+<p>We see that industry has 71 -1 values so, again we assign those values to no information.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Sector[Uncleaned_DS_jobs<span class="sc">$</span>Sector <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Industry[Uncleaned_DS_jobs<span class="sc">$</span>Industry <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Histogram of the Sector Variable:</p>
+<p>Histogram of the Industry Variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>top10_sector <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sector) <span class="sc">%&gt;%</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Selecting by count</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder the levels of Sector based on frequency</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span>  Uncleaned_DS_jobs</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>plot_data<span class="sc">$</span>Sector <span class="ot">&lt;-</span> <span class="fu">factor</span>(plot_data<span class="sc">$</span>Sector, <span class="at">levels =</span> top10_sector<span class="sc">$</span>Sector)</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to include only the top 10 sector</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> plot_data <span class="sc">%&gt;%</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sector <span class="sc">%in%</span> top10_sector<span class="sc">$</span>Sector)</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>Sector_plot_top10 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(filtered_data, <span class="fu">aes</span>(<span class="at">x =</span> Sector)) <span class="sc">+</span></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Top 10 Sector"</span>, <span class="at">x =</span> <span class="st">"Sector"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">2.68</span>) <span class="sc">+</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>Sector_plot_top10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>industry_plot<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x=</span>Industry)) <span class="sc">+</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Industry"</span>, <span class="at">x =</span> <span class="st">"Industry"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour=</span><span class="st">"darkblue"</span>, <span class="at">fill=</span><span class="st">"lightblue"</span>) <span class="sc">+</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat=</span><span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label=</span>..count..), <span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.5</span>,<span class="at">size=</span><span class="fl">2.68</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>industry_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.
 ℹ Please use `after_stat(count)` instead.</code></pre>
@@ -423,63 +404,78 @@ $ Competitors         &lt;chr&gt; "EmblemHealth, UnitedHealth Group, Aetna", "-1
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<ul>
-<li>Industry</li>
-</ul>
+<p>As can be seen from the graph it is hard to read the x axis names so to solve this problem, we picked the 10 industries that have the most frequencies in the data and draw a plot regarding these industries.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Industry <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>top10_industries <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Industry) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Selecting by count</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder the levels of Industry based on frequency</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span>  Uncleaned_DS_jobs</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>plot_data<span class="sc">$</span>Industry <span class="ot">&lt;-</span> <span class="fu">factor</span>(plot_data<span class="sc">$</span>Industry, <span class="at">levels =</span> top10_industries<span class="sc">$</span>Industry)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to include only the top 10 industries</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> plot_data <span class="sc">%&gt;%</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Industry <span class="sc">%in%</span> top10_industries<span class="sc">$</span>Industry)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>industry_plot_top10 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(filtered_data, <span class="fu">aes</span>(<span class="at">x =</span> Industry)) <span class="sc">+</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Top 10 Industries"</span>, <span class="at">x =</span> <span class="st">"Industry"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">2.68</span>) <span class="sc">+</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>industry_plot_top10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Sector</li>
+</ul>
+<p>Realizing that sector variable also has -1 values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(Uncleaned_DS_jobs<span class="sc">$</span>Sector <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 71</code></pre>
 </div>
 </div>
-<p>We see that industry has 71 -1 values so, again we assign those values to no information.</p>
+<p>We change -1 values to no information for the sector variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Industry[Uncleaned_DS_jobs<span class="sc">$</span>Industry <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs<span class="sc">$</span>Sector[Uncleaned_DS_jobs<span class="sc">$</span>Sector <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"No information"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Histogram of the Industry Variable:</p>
+<p>Histogram of the Sector Variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>industry_plot<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x=</span>Industry)) <span class="sc">+</span> </span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Industry"</span>, <span class="at">x =</span> <span class="st">"Industry"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour=</span><span class="st">"darkblue"</span>, <span class="at">fill=</span><span class="st">"lightblue"</span>) <span class="sc">+</span> </span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat=</span><span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label=</span>..count..), <span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.5</span>,<span class="at">size=</span><span class="fl">2.68</span>) <span class="sc">+</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>industry_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>As can be seen from the graph it is hard to read the x axis names so to solve this problem, we picked the 10 industries that have the most frequencies in the data and draw a plot regarding these industries.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>top10_industries <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Industry) <span class="sc">%&gt;%</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>top10_sector <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span>   <span class="fu">group_by</span>(Sector) <span class="sc">%&gt;%</span>   <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span>   <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span>   <span class="fu">top_n</span>(<span class="dv">10</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Selecting by count</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder the levels of Industry based on frequency</span></span>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reorder the levels of Sector based on frequency </span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span>  Uncleaned_DS_jobs</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>plot_data<span class="sc">$</span>Industry <span class="ot">&lt;-</span> <span class="fu">factor</span>(plot_data<span class="sc">$</span>Industry, <span class="at">levels =</span> top10_industries<span class="sc">$</span>Industry)</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to include only the top 10 industries</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> plot_data <span class="sc">%&gt;%</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Industry <span class="sc">%in%</span> top10_industries<span class="sc">$</span>Industry)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>industry_plot_top10 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(filtered_data, <span class="fu">aes</span>(<span class="at">x =</span> Industry)) <span class="sc">+</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Top 10 Industries"</span>, <span class="at">x =</span> <span class="st">"Industry"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">2.68</span>) <span class="sc">+</span></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>industry_plot_top10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>plot_data<span class="sc">$</span>Sector <span class="ot">&lt;-</span> <span class="fu">factor</span>(plot_data<span class="sc">$</span>Sector, <span class="at">levels =</span> top10_sector<span class="sc">$</span>Sector)  </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to include only the top 10 sector </span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> plot_data <span class="sc">%&gt;%</span>   </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sector <span class="sc">%in%</span> top10_sector<span class="sc">$</span>Sector)  </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>Sector_plot_top10 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(filtered_data, <span class="fu">aes</span>(<span class="at">x =</span> Sector)) <span class="sc">+</span>   </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Top 10 Sector"</span>, <span class="at">x =</span> <span class="st">"Sector"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span>    </span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span>  </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">2.68</span>) <span class="sc">+</span>   </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span>   </span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))   </span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>Sector_plot_top10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<ul>
+<li></li>
+</ul>
+<!-- -->
 <ul>
 <li>Revenue</li>
 </ul>
@@ -1792,7 +1788,7 @@ Data Science and Analytics Manager                     Data Scientist
 <h2 class="anchored" data-anchor-id="visualizations">Visualizations</h2>
 <p>First, see our variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(Uncleaned_DS_jobs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb201"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(Uncleaned_DS_jobs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 672
 Columns: 31
@@ -1834,43 +1830,43 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 <li><p>Low Limit Estimate for Salary</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb195"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Job_Title, <span class="at">y =</span> Low_Limit_For_Salary)) <span class="sc">+</span></span>
-<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Low Limit Salary Distribution by Job Title"</span>,</span>
-<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
-<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Low Limit for Salary"</span>) <span class="sc">+</span></span>
-<span id="cb195-6"><a href="#cb195-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb195-7"><a href="#cb195-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb195-8"><a href="#cb195-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb195-9"><a href="#cb195-9" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb203"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Job_Title, <span class="at">y =</span> Low_Limit_For_Salary)) <span class="sc">+</span></span>
+<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Low Limit Salary Distribution by Job Title"</span>,</span>
+<span id="cb203-4"><a href="#cb203-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
+<span id="cb203-5"><a href="#cb203-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Low Limit for Salary"</span>) <span class="sc">+</span></span>
+<span id="cb203-6"><a href="#cb203-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb203-7"><a href="#cb203-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb203-8"><a href="#cb203-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb203-9"><a href="#cb203-9" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-131-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate median low salary limits for each job title</span></span>
-<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
-<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_salary =</span> <span class="fu">median</span>(Low_Limit_For_Salary))</span>
-<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data by median low salary in descending order</span></span>
-<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> salary_median <span class="sc">%&gt;%</span></span>
-<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(median_salary))</span>
-<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(salary_median, </span>
-<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, </span>
-<span id="cb196-13"><a href="#cb196-13" aria-hidden="true" tabindex="-1"></a>                                              median_salary), </span>
-<span id="cb196-14"><a href="#cb196-14" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> median_salary)) <span class="sc">+</span></span>
-<span id="cb196-15"><a href="#cb196-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">col =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
-<span id="cb196-16"><a href="#cb196-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(median_salary)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb196-17"><a href="#cb196-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Low Limit for Salary by Job Title"</span>,</span>
-<span id="cb196-18"><a href="#cb196-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
-<span id="cb196-19"><a href="#cb196-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Median Low Limit for Salary"</span>) <span class="sc">+</span></span>
-<span id="cb196-20"><a href="#cb196-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb196-21"><a href="#cb196-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb196-22"><a href="#cb196-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-23"><a href="#cb196-23" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb204"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate median low salary limits for each job title</span></span>
+<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb204-3"><a href="#cb204-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
+<span id="cb204-4"><a href="#cb204-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_salary =</span> <span class="fu">median</span>(Low_Limit_For_Salary))</span>
+<span id="cb204-5"><a href="#cb204-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-6"><a href="#cb204-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data by median low salary in descending order</span></span>
+<span id="cb204-7"><a href="#cb204-7" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> salary_median <span class="sc">%&gt;%</span></span>
+<span id="cb204-8"><a href="#cb204-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(median_salary))</span>
+<span id="cb204-9"><a href="#cb204-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-10"><a href="#cb204-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-11"><a href="#cb204-11" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(salary_median, </span>
+<span id="cb204-12"><a href="#cb204-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, </span>
+<span id="cb204-13"><a href="#cb204-13" aria-hidden="true" tabindex="-1"></a>                                              median_salary), </span>
+<span id="cb204-14"><a href="#cb204-14" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> median_salary)) <span class="sc">+</span></span>
+<span id="cb204-15"><a href="#cb204-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">col =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
+<span id="cb204-16"><a href="#cb204-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(median_salary)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb204-17"><a href="#cb204-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Low Limit for Salary by Job Title"</span>,</span>
+<span id="cb204-18"><a href="#cb204-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
+<span id="cb204-19"><a href="#cb204-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Median Low Limit for Salary"</span>) <span class="sc">+</span></span>
+<span id="cb204-20"><a href="#cb204-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb204-21"><a href="#cb204-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb204-22"><a href="#cb204-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-23"><a href="#cb204-23" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-132-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1879,80 +1875,81 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 <li>High Limit Estimate for Salary</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb197"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a>salary_distribution_high <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Job_Title, <span class="at">y =</span> High_Limit_For_Salary)) <span class="sc">+</span></span>
-<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"High Limit Salary Distribution by Job Title"</span>,</span>
-<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
-<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"High Limit for Salary"</span>) <span class="sc">+</span></span>
-<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb197-7"><a href="#cb197-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb197-8"><a href="#cb197-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb197-9"><a href="#cb197-9" aria-hidden="true" tabindex="-1"></a>salary_distribution_high</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a>salary_distribution_high <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Job_Title, <span class="at">y =</span> High_Limit_For_Salary)) <span class="sc">+</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"High Limit Salary Distribution by Job Title"</span>,</span>
+<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
+<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"High Limit for Salary"</span>) <span class="sc">+</span></span>
+<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb205-7"><a href="#cb205-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb205-8"><a href="#cb205-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-9"><a href="#cb205-9" aria-hidden="true" tabindex="-1"></a>salary_distribution_high</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-133-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate median low salary limits for each job title</span></span>
-<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
-<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_salary =</span> <span class="fu">median</span>(High_Limit_For_Salary))</span>
-<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data by median low salary in descending order</span></span>
-<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> salary_median <span class="sc">%&gt;%</span></span>
-<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(median_salary))</span>
-<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb198-10"><a href="#cb198-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb198-11"><a href="#cb198-11" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(salary_median, </span>
-<span id="cb198-12"><a href="#cb198-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, </span>
-<span id="cb198-13"><a href="#cb198-13" aria-hidden="true" tabindex="-1"></a>                                              median_salary), </span>
-<span id="cb198-14"><a href="#cb198-14" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> median_salary)) <span class="sc">+</span></span>
-<span id="cb198-15"><a href="#cb198-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">col =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
-<span id="cb198-16"><a href="#cb198-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(median_salary)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb198-17"><a href="#cb198-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Low Limit for Salary by Job Title"</span>,</span>
-<span id="cb198-18"><a href="#cb198-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
-<span id="cb198-19"><a href="#cb198-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Median Low Limit for Salary"</span>) <span class="sc">+</span></span>
-<span id="cb198-20"><a href="#cb198-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb198-21"><a href="#cb198-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb198-22"><a href="#cb198-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb198-23"><a href="#cb198-23" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb206"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate median low salary limits for each job title</span></span>
+<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb206-3"><a href="#cb206-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
+<span id="cb206-4"><a href="#cb206-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_salary =</span> <span class="fu">median</span>(High_Limit_For_Salary))</span>
+<span id="cb206-5"><a href="#cb206-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-6"><a href="#cb206-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the data by median low salary in descending order</span></span>
+<span id="cb206-7"><a href="#cb206-7" aria-hidden="true" tabindex="-1"></a>salary_median <span class="ot">&lt;-</span> salary_median <span class="sc">%&gt;%</span></span>
+<span id="cb206-8"><a href="#cb206-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(median_salary))</span>
+<span id="cb206-9"><a href="#cb206-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-10"><a href="#cb206-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-11"><a href="#cb206-11" aria-hidden="true" tabindex="-1"></a>salary_distribution <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(salary_median, </span>
+<span id="cb206-12"><a href="#cb206-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, </span>
+<span id="cb206-13"><a href="#cb206-13" aria-hidden="true" tabindex="-1"></a>                                              median_salary), </span>
+<span id="cb206-14"><a href="#cb206-14" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> median_salary)) <span class="sc">+</span></span>
+<span id="cb206-15"><a href="#cb206-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">col =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
+<span id="cb206-16"><a href="#cb206-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(median_salary)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb206-17"><a href="#cb206-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Low Limit for Salary by Job Title"</span>,</span>
+<span id="cb206-18"><a href="#cb206-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
+<span id="cb206-19"><a href="#cb206-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Median Low Limit for Salary"</span>) <span class="sc">+</span></span>
+<span id="cb206-20"><a href="#cb206-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb206-21"><a href="#cb206-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.2</span>, <span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb206-22"><a href="#cb206-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-23"><a href="#cb206-23" aria-hidden="true" tabindex="-1"></a>salary_distribution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-134-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>As can be seen from the graph that there is not a significant difference between the medians of the different job titles.</p>
 <ul>
 <li><p><strong>Company Size vs.&nbsp;Salaries:</strong> To explore how salary ranges vary across different company sizes:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb199"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new variable with sorted factor levels</span></span>
-<span id="cb199-2"><a href="#cb199-2" aria-hidden="true" tabindex="-1"></a>data_sorted <span class="ot">&lt;-</span> <span class="fu">transform</span>(Uncleaned_DS_jobs, <span class="at">Size_Sorted =</span> <span class="fu">factor</span>(Size, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(Size))))</span>
-<span id="cb199-3"><a href="#cb199-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb199-4"><a href="#cb199-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for Low_Limit_For_Salary with adjusted y-axis limits</span></span>
-<span id="cb199-5"><a href="#cb199-5" aria-hidden="true" tabindex="-1"></a>plot_low <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_sorted, <span class="fu">aes</span>(<span class="at">x =</span> Size_Sorted, <span class="at">y =</span> Low_Limit_For_Salary, <span class="at">fill =</span> <span class="fu">factor</span>(Size_Sorted))) <span class="sc">+</span></span>
-<span id="cb199-6"><a href="#cb199-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb199-7"><a href="#cb199-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Low Limit Salary Ranges across Company Sizes"</span>,</span>
-<span id="cb199-8"><a href="#cb199-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Company Size"</span>,</span>
-<span id="cb199-9"><a href="#cb199-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Low Limit Salary"</span>) <span class="sc">+</span></span>
-<span id="cb199-10"><a href="#cb199-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
-<span id="cb199-11"><a href="#cb199-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb199-12"><a href="#cb199-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb199-13"><a href="#cb199-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">340000</span>))  <span class="co"># Set y-axis limits</span></span>
-<span id="cb199-14"><a href="#cb199-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb199-15"><a href="#cb199-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for High_Limit_For_Salary with the same y-axis limits</span></span>
-<span id="cb199-16"><a href="#cb199-16" aria-hidden="true" tabindex="-1"></a>plot_high <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_sorted, <span class="fu">aes</span>(<span class="at">x =</span> Size_Sorted, <span class="at">y =</span> High_Limit_For_Salary, <span class="at">fill =</span> <span class="fu">factor</span>(Size_Sorted))) <span class="sc">+</span></span>
-<span id="cb199-17"><a href="#cb199-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb199-18"><a href="#cb199-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"High Limit Salary Ranges across Company Sizes"</span>,</span>
-<span id="cb199-19"><a href="#cb199-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Company Size"</span>,</span>
-<span id="cb199-20"><a href="#cb199-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"High Limit Salary"</span>) <span class="sc">+</span></span>
-<span id="cb199-21"><a href="#cb199-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
-<span id="cb199-22"><a href="#cb199-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb199-23"><a href="#cb199-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb199-24"><a href="#cb199-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">340000</span>))  <span class="co"># Set y-axis limits</span></span>
-<span id="cb199-25"><a href="#cb199-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb199-26"><a href="#cb199-26" aria-hidden="true" tabindex="-1"></a>plot_low</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new variable with sorted factor levels</span></span>
+<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a>data_sorted <span class="ot">&lt;-</span> <span class="fu">transform</span>(Uncleaned_DS_jobs, <span class="at">Size_Sorted =</span> <span class="fu">factor</span>(Size, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(Size))))</span>
+<span id="cb207-3"><a href="#cb207-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-4"><a href="#cb207-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for Low_Limit_For_Salary with adjusted y-axis limits</span></span>
+<span id="cb207-5"><a href="#cb207-5" aria-hidden="true" tabindex="-1"></a>plot_low <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_sorted, <span class="fu">aes</span>(<span class="at">x =</span> Size_Sorted, <span class="at">y =</span> Low_Limit_For_Salary, <span class="at">fill =</span> <span class="fu">factor</span>(Size_Sorted))) <span class="sc">+</span></span>
+<span id="cb207-6"><a href="#cb207-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb207-7"><a href="#cb207-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Low Limit Salary Ranges across Company Sizes"</span>,</span>
+<span id="cb207-8"><a href="#cb207-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Company Size"</span>,</span>
+<span id="cb207-9"><a href="#cb207-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Low Limit Salary"</span>) <span class="sc">+</span></span>
+<span id="cb207-10"><a href="#cb207-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
+<span id="cb207-11"><a href="#cb207-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb207-12"><a href="#cb207-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb207-13"><a href="#cb207-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">340000</span>))  <span class="co"># Set y-axis limits</span></span>
+<span id="cb207-14"><a href="#cb207-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-15"><a href="#cb207-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create boxplot for High_Limit_For_Salary with the same y-axis limits</span></span>
+<span id="cb207-16"><a href="#cb207-16" aria-hidden="true" tabindex="-1"></a>plot_high <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_sorted, <span class="fu">aes</span>(<span class="at">x =</span> Size_Sorted, <span class="at">y =</span> High_Limit_For_Salary, <span class="at">fill =</span> <span class="fu">factor</span>(Size_Sorted))) <span class="sc">+</span></span>
+<span id="cb207-17"><a href="#cb207-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb207-18"><a href="#cb207-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"High Limit Salary Ranges across Company Sizes"</span>,</span>
+<span id="cb207-19"><a href="#cb207-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Company Size"</span>,</span>
+<span id="cb207-20"><a href="#cb207-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"High Limit Salary"</span>) <span class="sc">+</span></span>
+<span id="cb207-21"><a href="#cb207-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
+<span id="cb207-22"><a href="#cb207-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb207-23"><a href="#cb207-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb207-24"><a href="#cb207-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30000</span>, <span class="dv">340000</span>))  <span class="co"># Set y-axis limits</span></span>
+<span id="cb207-25"><a href="#cb207-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-26"><a href="#cb207-26" aria-hidden="true" tabindex="-1"></a>plot_low</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-135-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a>plot_high</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a>plot_high</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-135-2.png" class="img-fluid" width="672"></p>
 </div>
@@ -1961,10 +1958,10 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 </ul>
 <p>Firstly, we can see the distribution of Senior Position among the job titles:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb201"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="sc">%&gt;%</span> </span>
-<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Senior_Position, Job_Title)  <span class="sc">%&gt;%</span> </span>
-<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title, Senior_Position)  <span class="sc">%&gt;%</span> </span>
-<span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb209"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1" aria-hidden="true" tabindex="-1"></a>Uncleaned_DS_jobs <span class="sc">%&gt;%</span> </span>
+<span id="cb209-2"><a href="#cb209-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Senior_Position, Job_Title)  <span class="sc">%&gt;%</span> </span>
+<span id="cb209-3"><a href="#cb209-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title, Senior_Position)  <span class="sc">%&gt;%</span> </span>
+<span id="cb209-4"><a href="#cb209-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 3
 # Groups:   Job_Title, Senior_Position [12]
@@ -1986,11 +1983,11 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 </div>
 <p>Then we will calculate the percentage of the senior positions for every title:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb203"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a>senior_proportion <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
-<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Percentage_Senior =</span> <span class="fu">mean</span>(Senior_Position) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb203-4"><a href="#cb203-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Percentage_Senior))</span>
-<span id="cb203-5"><a href="#cb203-5" aria-hidden="true" tabindex="-1"></a>senior_proportion</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a>senior_proportion <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb211-2"><a href="#cb211-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Title) <span class="sc">%&gt;%</span></span>
+<span id="cb211-3"><a href="#cb211-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Percentage_Senior =</span> <span class="fu">mean</span>(Senior_Position) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb211-4"><a href="#cb211-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Percentage_Senior))</span>
+<span id="cb211-5"><a href="#cb211-5" aria-hidden="true" tabindex="-1"></a>senior_proportion</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 2
   Job_Title                          Percentage_Senior
@@ -2006,16 +2003,16 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 </div>
 <p>Let’s create bar graph:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a>senior_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(senior_proportion, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, Percentage_Senior), <span class="at">y =</span> Percentage_Senior)) <span class="sc">+</span></span>
-<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(Percentage_Senior), <span class="st">"%"</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Proportion of Senior Positions by Job Title"</span>,</span>
-<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
-<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Percentage of Senior Positions"</span>) <span class="sc">+</span></span>
-<span id="cb205-7"><a href="#cb205-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb205-8"><a href="#cb205-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb205-9"><a href="#cb205-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-10"><a href="#cb205-10" aria-hidden="true" tabindex="-1"></a>senior_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a>senior_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(senior_proportion, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Job_Title, Percentage_Senior), <span class="at">y =</span> Percentage_Senior)) <span class="sc">+</span></span>
+<span id="cb213-2"><a href="#cb213-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb213-3"><a href="#cb213-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(Percentage_Senior), <span class="st">"%"</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb213-4"><a href="#cb213-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Proportion of Senior Positions by Job Title"</span>,</span>
+<span id="cb213-5"><a href="#cb213-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Job Title"</span>,</span>
+<span id="cb213-6"><a href="#cb213-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Percentage of Senior Positions"</span>) <span class="sc">+</span></span>
+<span id="cb213-7"><a href="#cb213-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb213-8"><a href="#cb213-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb213-9"><a href="#cb213-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb213-10"><a href="#cb213-10" aria-hidden="true" tabindex="-1"></a>senior_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-138-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -2025,17 +2022,19 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 <li><strong>Industry Analysis:</strong> Use a treemap to display the distribution of job positions across different industries.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb206"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(treemap)</span>
-<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb206-3"><a href="#cb206-3" aria-hidden="true" tabindex="-1"></a>job_count_by_industry <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
-<span id="cb206-4"><a href="#cb206-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Industry) <span class="sc">%&gt;%</span></span>
-<span id="cb206-5"><a href="#cb206-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Job_Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb206-6"><a href="#cb206-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Job_Count))</span>
-<span id="cb206-7"><a href="#cb206-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb206-8"><a href="#cb206-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a treemap for job positions across different industries with custom theme</span></span>
-<span id="cb206-9"><a href="#cb206-9" aria-hidden="true" tabindex="-1"></a>treemap_plot <span class="ot">&lt;-</span> <span class="fu">treemap</span>(job_count_by_industry, <span class="at">index =</span> <span class="st">"Industry"</span>, <span class="at">vSize =</span> <span class="st">"Job_Count"</span>,</span>
-<span id="cb206-10"><a href="#cb206-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">title =</span> <span class="st">"Distribution of Job Positions across Industries"</span>,</span>
-<span id="cb206-11"><a href="#cb206-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">palette =</span> <span class="st">"Blues"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb214"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(treemap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'treemap' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb216"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb216-1"><a href="#cb216-1" aria-hidden="true" tabindex="-1"></a>job_count_by_industry <span class="ot">&lt;-</span> Uncleaned_DS_jobs <span class="sc">%&gt;%</span></span>
+<span id="cb216-2"><a href="#cb216-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Industry) <span class="sc">%&gt;%</span></span>
+<span id="cb216-3"><a href="#cb216-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Job_Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb216-4"><a href="#cb216-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Job_Count))</span>
+<span id="cb216-5"><a href="#cb216-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb216-6"><a href="#cb216-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a treemap for job positions across different industries with custom theme</span></span>
+<span id="cb216-7"><a href="#cb216-7" aria-hidden="true" tabindex="-1"></a>treemap_plot <span class="ot">&lt;-</span> <span class="fu">treemap</span>(job_count_by_industry, <span class="at">index =</span> <span class="st">"Industry"</span>, <span class="at">vSize =</span> <span class="st">"Job_Count"</span>,</span>
+<span id="cb216-8"><a href="#cb216-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">title =</span> <span class="st">"Distribution of Job Positions across Industries"</span>,</span>
+<span id="cb216-9"><a href="#cb216-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">palette =</span> <span class="st">"Blues"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-139-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -2045,22 +2044,51 @@ $ stat_needed           &lt;fct&gt; 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
 <li>Revenue vs.&nbsp;Ratings: Create a grouped boxplot to show the distribution of ratings for different revenue categories</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a>boxplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, </span>
-<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x =</span> Revenue, </span>
-<span id="cb207-3"><a href="#cb207-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> Rating, </span>
-<span id="cb207-4"><a href="#cb207-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fill =</span> Revenue)) <span class="sc">+</span></span>
-<span id="cb207-5"><a href="#cb207-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb207-6"><a href="#cb207-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rating Distribution across Revenue Categories"</span>,</span>
-<span id="cb207-7"><a href="#cb207-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Revenue Categories"</span>,</span>
-<span id="cb207-8"><a href="#cb207-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rating"</span>) <span class="sc">+</span></span>
-<span id="cb207-9"><a href="#cb207-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb207-10"><a href="#cb207-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb207-11"><a href="#cb207-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb207-12"><a href="#cb207-12" aria-hidden="true" tabindex="-1"></a>boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb217"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb217-1"><a href="#cb217-1" aria-hidden="true" tabindex="-1"></a>boxplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Uncleaned_DS_jobs, </span>
+<span id="cb217-2"><a href="#cb217-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x =</span> Revenue, </span>
+<span id="cb217-3"><a href="#cb217-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> Rating, </span>
+<span id="cb217-4"><a href="#cb217-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fill =</span> Revenue)) <span class="sc">+</span></span>
+<span id="cb217-5"><a href="#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb217-6"><a href="#cb217-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rating Distribution across Revenue Categories"</span>,</span>
+<span id="cb217-7"><a href="#cb217-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Revenue Categories"</span>,</span>
+<span id="cb217-8"><a href="#cb217-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rating"</span>) <span class="sc">+</span></span>
+<span id="cb217-9"><a href="#cb217-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb217-10"><a href="#cb217-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb217-11"><a href="#cb217-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb217-12"><a href="#cb217-12" aria-hidden="true" tabindex="-1"></a>boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-140-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<ul>
+<li><p>Overview of Skills Needed in the Job Postings:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb218"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb218-1"><a href="#cb218-1" aria-hidden="true" tabindex="-1"></a>skills_df <span class="ot">&lt;-</span> Uncleaned_DS_jobs[, <span class="fu">c</span>(<span class="st">"sql_needed"</span>, <span class="st">"python_needed"</span>, <span class="st">"numpy_needed"</span>, <span class="st">"stat_needed"</span>,<span class="st">"excel_needed"</span>,<span class="st">"hadoop_needed"</span>,<span class="st">"spark_needed"</span>,</span>
+<span id="cb218-2"><a href="#cb218-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"aws_needed"</span>,<span class="st">"tableau_needed"</span>,<span class="st">"bigdata_needed"</span>,<span class="st">"ML_needed"</span>,<span class="st">"DL_needed"</span>)]</span>
+<span id="cb218-3"><a href="#cb218-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-4"><a href="#cb218-4" aria-hidden="true" tabindex="-1"></a>skills_long <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(skills_df, <span class="at">key =</span> <span class="st">"Skill"</span>, <span class="at">value =</span> <span class="st">"Needed"</span>)</span>
+<span id="cb218-5"><a href="#cb218-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-6"><a href="#cb218-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-7"><a href="#cb218-7" aria-hidden="true" tabindex="-1"></a>my_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"darkblue"</span>)</span>
+<span id="cb218-8"><a href="#cb218-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-9"><a href="#cb218-9" aria-hidden="true" tabindex="-1"></a>skills_long<span class="sc">$</span>Needed <span class="ot">&lt;-</span> <span class="fu">factor</span>(skills_long<span class="sc">$</span>Needed, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"1"</span>))</span>
+<span id="cb218-10"><a href="#cb218-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-11"><a href="#cb218-11" aria-hidden="true" tabindex="-1"></a>skills_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(skills_long, <span class="fu">aes</span>(<span class="at">x =</span> Skill, <span class="at">fill =</span> Needed)) <span class="sc">+</span></span>
+<span id="cb218-12"><a href="#cb218-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb218-13"><a href="#cb218-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> my_colors) <span class="sc">+</span> </span>
+<span id="cb218-14"><a href="#cb218-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Overview of Skills Needed"</span>,</span>
+<span id="cb218-15"><a href="#cb218-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Skill"</span>,</span>
+<span id="cb218-16"><a href="#cb218-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
+<span id="cb218-17"><a href="#cb218-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb218-18"><a href="#cb218-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb218-19"><a href="#cb218-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-20"><a href="#cb218-20" aria-hidden="true" tabindex="-1"></a>skills_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT570-Final-Project_files/figure-html/unnamed-chunk-141-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
+</ul>
+<p>As can be seen from the graph that python and ML are most mentioned skills that are required in the job postings.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>

@@ -107,7 +107,7 @@ Uncleaned_DS_jobs$index <- NULL
 
 -   Rating
 
-We realized that from the summary, Rating has a minimum value as -1, but the rating should be between 1 to 5.
+We realized that from the summary, Rating has a minimum value as -1, but the rating should be between 0 to 5.
 
 We need to fix that problem.
 
@@ -168,49 +168,6 @@ summary(as.factor(Uncleaned_DS_jobs$Founded), maxsum = 6)
 
 From the summary we also fix the problem for Founded.
 
--   Sector
-
-Realizing that sector variable also has -1 values.
-
-```{r}
-sum(Uncleaned_DS_jobs$Sector == -1)
-
-```
-
-We change -1 values to no information for the sector variable.
-
-```{r}
-Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
-```
-
-Histogram of the Sector Variable:
-
-```{r}
-top10_sector <- Uncleaned_DS_jobs %>%
-  group_by(Sector) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) %>%
-  top_n(10)
-
-# Reorder the levels of Sector based on frequency
-plot_data <-  Uncleaned_DS_jobs
-plot_data$Sector <- factor(plot_data$Sector, levels = top10_sector$Sector)
-
-# Filter data to include only the top 10 sector
-filtered_data <- plot_data %>%
-  filter(Sector %in% top10_sector$Sector)
-
-Sector_plot_top10 <- ggplot(filtered_data, aes(x = Sector)) +
-  labs(title = "Distribution of Top 10 Sector", x = "Sector", subtitle = "") +
-  geom_bar(colour = "darkblue", fill = "lightblue") +
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))
-
-
-Sector_plot_top10
-```
-
 -   Industry
 
 ```{r}
@@ -261,6 +218,39 @@ industry_plot_top10 <- ggplot(filtered_data, aes(x = Industry)) +
 
 
 industry_plot_top10
+```
+
+-   Sector
+
+Realizing that sector variable also has -1 values.
+
+```{r}
+sum(Uncleaned_DS_jobs$Sector == -1) 
+```
+
+We change -1 values to no information for the sector variable.
+
+```{r}
+Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
+```
+
+Histogram of the Sector Variable:
+
+```{r}
+top10_sector <- Uncleaned_DS_jobs %>%   group_by(Sector) %>%   summarise(count = n()) %>%   arrange(desc(count)) %>%   top_n(10)  
+# Reorder the levels of Sector based on frequency 
+plot_data <-  Uncleaned_DS_jobs
+plot_data$Sector <- factor(plot_data$Sector, levels = top10_sector$Sector)  
+# Filter data to include only the top 10 sector 
+filtered_data <- plot_data %>%   
+  filter(Sector %in% top10_sector$Sector)  
+Sector_plot_top10 <- ggplot(filtered_data, aes(x = Sector)) +   
+  labs(title = "Distribution of Top 10 Sector", x = "Sector", subtitle = "") +    
+  geom_bar(colour = "darkblue", fill = "lightblue") +  
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +   
+  theme_classic() +   
+  theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))   
+Sector_plot_top10
 ```
 
 -   Revenue
@@ -347,7 +337,7 @@ filtered_data <- plot_data %>%
   filter(Company_Name %in% top10_companies$Company_Name)
 
 company_plot_top10 <- ggplot(filtered_data, aes(x = Company_Name)) +
-  labs(title = "Distribution of Top 10 Companies", x = "Companu Name", subtitle = "") +
+  labs(title = "Distribution of Top 10 Companies", x = "Company Name", subtitle = "") +
   geom_bar(colour = "darkblue", fill = "lightblue") +
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
   theme_classic() +
@@ -624,10 +614,6 @@ head(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces)
 
 Now we have no blank space between the words.
 
-```{r}
-## str_view(Uncleaned_DS_jobs$Salary_Estimate_wo_spaces, "[a-z0-9]+")
-```
-
 Let's get rid of the parts at the end; Glassdoor est. and Employer est.
 
 ```{r}
@@ -711,7 +697,7 @@ head(
       Uncleaned_DS_jobs$Job_Title)))
 ```
 
-But before that, we can see that some columns have "Senior", "Manager" words. By using this information, we can create a new column for seniority of the job.
+But before that, we can see that some columns have "Senior", "Experience" words. By using this information, we can create a new column for seniority of the job.
 
 By using `str_view()` function, first, let's see that columns;
 
@@ -722,7 +708,7 @@ str_view(
         multiline = TRUE))
 ```
 
-By using `str_detect()` function, we can detect the rows including "Senior", "Sr", "Experienced", "Manager" words. This function returns TRUE if they exist, and returns FALSE if they don't exist.
+By using `str_detect()` function, we can detect the rows including "Senior", "Sr", "Experienced" words. This function returns TRUE if they exist, and returns FALSE if they don't exist.
 
 By using `as.integer()` , we assign 1 to exists and 0 to nonexistent.
 
@@ -1324,15 +1310,17 @@ salary_distribution <- ggplot(salary_median,
                                   y = median_salary)) +
   geom_bar(stat = "identity", fill = "lightblue", col = "darkblue") +
   geom_text(aes(label = scales::comma(median_salary)), vjust = -0.5, size = 3) +
-  labs(title = "Median Low Limit for Salary by Job Title",
+  labs(title = "Median High Limit for Salary by Job Title",
        x = "Job Title",
-       y = "Median Low Limit for Salary") +
+       y = "Median High Limit for Salary") +
   theme_classic() +
   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
 
 salary_distribution
 
 ```
+
+As can be seen from the graph that there is not a significant difference between the medians of the different job titles.
 
 -   **Company Size vs. Salaries:** To explore how salary ranges vary across different company sizes:
 
@@ -1349,7 +1337,7 @@ salary_distribution
       scale_fill_discrete(name = "Company Size") +
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      coord_cartesian(ylim = c(30000, 340000))  # Set y-axis limits
+      coord_cartesian(ylim = c(0, 340000))  # Set y-axis limits
 
     # Create boxplot for High_Limit_For_Salary with the same y-axis limits
     plot_high <- ggplot(data_sorted, aes(x = Size_Sorted, y = High_Limit_For_Salary, fill = factor(Size_Sorted))) +
@@ -1360,7 +1348,7 @@ salary_distribution
       scale_fill_discrete(name = "Company Size") +
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      coord_cartesian(ylim = c(30000, 340000))  # Set y-axis limits
+      coord_cartesian(ylim = c(0, 340000))  # Set y-axis limits
 
     plot_low
     plot_high
@@ -1438,6 +1426,34 @@ boxplot <- ggplot(Uncleaned_DS_jobs,
 
 boxplot
 ```
+
+-   Overview of Skills Needed in the Job Postings:
+
+    ```{r}
+    skills_df <- Uncleaned_DS_jobs[, c("sql_needed", "python_needed", "numpy_needed", "stat_needed","excel_needed","hadoop_needed","spark_needed",
+                        "aws_needed","tableau_needed","bigdata_needed","ML_needed","DL_needed")]
+
+    skills_long <- tidyr::gather(skills_df, key = "Skill", value = "Needed")
+
+
+    my_colors <- c("lightblue", "darkblue")
+
+    skills_long$Needed <- factor(skills_long$Needed, levels = c("0", "1"))
+
+    skills_plot <- ggplot(skills_long, aes(x = Skill, fill = Needed)) +
+      geom_bar(position = "dodge", width = 0.7) +
+      scale_fill_manual(values = my_colors) + 
+      labs(title = "Overview of Skills Needed",
+           x = "Skill",
+           y = "Count") +
+      theme_classic() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+    skills_plot
+
+    ```
+
+As can be seen from the graph that python and ML are most mentioned skills that are required in the job postings.
 
 ## References
 
