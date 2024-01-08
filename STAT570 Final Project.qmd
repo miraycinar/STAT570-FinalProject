@@ -1240,6 +1240,205 @@ Now Let's check the new columns in our dataset:
 summary(Uncleaned_DS_jobs)
 ```
 
+## Visualizations
+
+First, see our variables:
+
+```{r}
+glimpse(Uncleaned_DS_jobs)
+```
+
+-   **Salary Distribution by Job Titles:** Let's display the distribution of salaries for different job titles; both for low limit estimate for salary and high limit estimate for salary:
+
+-   Low Limit Estimate for Salary
+
+```{r}
+salary_distribution <- ggplot(Uncleaned_DS_jobs, aes(x = Job_Title, y = Low_Limit_For_Salary)) +
+  geom_boxplot() +
+  labs(title = "Low Limit Salary Distribution by Job Title",
+       x = "Job Title",
+       y = "Low Limit for Salary") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+
+salary_distribution
+
+```
+
+```{r}
+# Calculate median low salary limits for each job title
+salary_median <- Uncleaned_DS_jobs %>%
+  group_by(Job_Title) %>%
+  summarise(median_salary = median(Low_Limit_For_Salary))
+
+# Sort the data by median low salary in descending order
+salary_median <- salary_median %>%
+  arrange(desc(median_salary))
+
+
+salary_distribution <- ggplot(salary_median, 
+                              aes(x = reorder(Job_Title, 
+                                              median_salary), 
+                                  y = median_salary)) +
+  geom_bar(stat = "identity", fill = "lightblue", col = "darkblue") +
+  geom_text(aes(label = scales::comma(median_salary)), vjust = -0.5, size = 3) +
+  labs(title = "Median Low Limit for Salary by Job Title",
+       x = "Job Title",
+       y = "Median Low Limit for Salary") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+
+salary_distribution
+
+
+```
+
+-   High Limit Estimate for Salary
+
+```{r}
+salary_distribution_high <- ggplot(Uncleaned_DS_jobs, aes(x = Job_Title, y = High_Limit_For_Salary)) +
+  geom_boxplot() +
+  labs(title = "High Limit Salary Distribution by Job Title",
+       x = "Job Title",
+       y = "High Limit for Salary") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+
+salary_distribution_high
+```
+
+```{r}
+# Calculate median low salary limits for each job title
+salary_median <- Uncleaned_DS_jobs %>%
+  group_by(Job_Title) %>%
+  summarise(median_salary = median(High_Limit_For_Salary))
+
+# Sort the data by median low salary in descending order
+salary_median <- salary_median %>%
+  arrange(desc(median_salary))
+
+
+salary_distribution <- ggplot(salary_median, 
+                              aes(x = reorder(Job_Title, 
+                                              median_salary), 
+                                  y = median_salary)) +
+  geom_bar(stat = "identity", fill = "lightblue", col = "darkblue") +
+  geom_text(aes(label = scales::comma(median_salary)), vjust = -0.5, size = 3) +
+  labs(title = "Median Low Limit for Salary by Job Title",
+       x = "Job Title",
+       y = "Median Low Limit for Salary") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
+
+salary_distribution
+
+```
+
+-   **Company Size vs. Salaries:** To explore how salary ranges vary across different company sizes:
+
+    ```{r}
+    # Create a new variable with sorted factor levels
+    data_sorted <- transform(Uncleaned_DS_jobs, Size_Sorted = factor(Size, levels = sort(unique(Size))))
+
+    # Create boxplot for Low_Limit_For_Salary with adjusted y-axis limits
+    plot_low <- ggplot(data_sorted, aes(x = Size_Sorted, y = Low_Limit_For_Salary, fill = factor(Size_Sorted))) +
+      geom_boxplot(alpha = 0.8) +
+      labs(title = "Low Limit Salary Ranges across Company Sizes",
+           x = "Company Size",
+           y = "Low Limit Salary") +
+      scale_fill_discrete(name = "Company Size") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_cartesian(ylim = c(30000, 340000))  # Set y-axis limits
+
+    # Create boxplot for High_Limit_For_Salary with the same y-axis limits
+    plot_high <- ggplot(data_sorted, aes(x = Size_Sorted, y = High_Limit_For_Salary, fill = factor(Size_Sorted))) +
+      geom_boxplot(alpha = 0.8) +
+      labs(title = "High Limit Salary Ranges across Company Sizes",
+           x = "Company Size",
+           y = "High Limit Salary") +
+      scale_fill_discrete(name = "Company Size") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_cartesian(ylim = c(30000, 340000))  # Set y-axis limits
+
+    plot_low
+    plot_high
+    ```
+
+-   **Job Titles vs. Senior Positions:** Visualize the proportion of senior positions against different job titles using a bar chart:
+
+Firstly, we can see the distribution of Senior Position among the job titles:
+
+```{r}
+Uncleaned_DS_jobs %>% 
+  select(Senior_Position, Job_Title)  %>% 
+  group_by(Job_Title, Senior_Position)  %>% 
+  count()
+```
+
+Then we will calculate the percentage of the senior positions for every title:
+
+```{r}
+senior_proportion <- Uncleaned_DS_jobs %>%
+  group_by(Job_Title) %>%
+  summarise(Percentage_Senior = mean(Senior_Position) * 100) %>%
+  arrange(desc(Percentage_Senior))
+senior_proportion
+```
+
+Let's create bar graph:
+
+```{r}
+senior_plot <- ggplot(senior_proportion, aes(x = reorder(Job_Title, Percentage_Senior), y = Percentage_Senior)) +
+  geom_bar(stat = "identity", fill = "skyblue", alpha = 0.8) +
+  geom_text(aes(label = paste0(round(Percentage_Senior), "%")), vjust = -0.5, size = 3.5, color = "black") +
+  labs(title = "Proportion of Senior Positions by Job Title",
+       x = "Job Title",
+       y = "Percentage of Senior Positions") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+senior_plot
+```
+
+We can see that the title that is searched for seniority is Data Analyst, however, only 21% of the Data Analyst positions are senior.
+
+-   **Industry Analysis:** Use a treemap to display the distribution of job positions across different industries.
+
+```{r}
+library(treemap)
+
+job_count_by_industry <- Uncleaned_DS_jobs %>%
+  group_by(Industry) %>%
+  summarise(Job_Count = n()) %>%
+  arrange(desc(Job_Count))
+
+# Create a treemap for job positions across different industries with custom theme
+treemap_plot <- treemap(job_count_by_industry, index = "Industry", vSize = "Job_Count",
+                        title = "Distribution of Job Positions across Industries",
+                        palette = "Blues")
+```
+
+We can see that the industries that are hiring the most are: Biotech & Pharmaceuticals, IT Services, Computer Hardware & Software, Aerospace & Defense and so on.
+
+-   Revenue vs. Ratings: Create a grouped boxplot to show the distribution of ratings for different revenue categories
+
+```{r}
+boxplot <- ggplot(Uncleaned_DS_jobs, 
+                  aes(x = Revenue, 
+                      y = Rating, 
+                      fill = Revenue)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(title = "Rating Distribution across Revenue Categories",
+       x = "Revenue Categories",
+       y = "Rating") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+boxplot
+```
+
 ## References
 
 About us \| glassdoor. (n.d.). <https://www.glassdoor.com/about/>
