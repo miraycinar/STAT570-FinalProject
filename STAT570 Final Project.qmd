@@ -1,7 +1,7 @@
 ---
-title: "STAT570 - Final Project"
-subtitle: "Data Scientist Job Posting Data"
-author: "Miray Çınar & Ecenaz Tunç"
+title: "Data Scientist Job Posting Data Analysis"
+subtitle: "From Glassdoor"
+author: "Miray Cinar and Ecenaz Tunc"
 format: html
 editor: visual
 toc: true
@@ -12,6 +12,16 @@ theme: "lux"
 bibliography: references.bib
 ---
 
+## Disclaimer
+
+This document is a product of the final project for the STAT 570 lecture, focusing on data handling and visualization tools. It is essential to acknowledge that minor errors may be present, and the methods employed may not necessarily reflect the optimal approach related to the data set.
+
+Authors:
+
+Miray Çınar - miray.cinar\@metu.edu.tr
+
+Ecenaz Tunç - ecenaz.tunc\@metu.edu.tr
+
 ## Introduction
 
 Glassdoor is an online platform where former or new employees can comment on companies and is also used for job search.
@@ -20,7 +30,7 @@ In their website, they define themselves as: "Glassdoor is one of the world's la
 
 ## Data Description
 
-Data is obtained from Kaggle, in which, the user claims that the data is obtained from Glassdoor.com by using web scrapping.
+Data is obtained from Kaggle, in which, the user claims that the data is obtained from Glassdoor.com by using web scrapping. The link for the data could be acquired from the References section.
 
 The variables in this data set are defined as follows:
 
@@ -48,7 +58,9 @@ The variables in this data set are defined as follows:
 
 ## Import the Data
 
-Let's start by importing the data. Fist, import the required libraries. If you don't already have them, you can use `install.packages()` function.
+Let's start by importing the data. We tried to import the data from Kaggle to Rstudio directly, by using several different packages but unfortunately for us, it was not possible. But we uploaded the data into out Github repository, so you can directly obtain it from there or from the Kaggle link that we put in the references. In the Kaggle, you can see that there are actually tow datasets, one is already cleaned, and one it unclean. We used the Uncleaned one here . :)
+
+First, import the required libraries. If you don't already have them, you can use `install.packages()` function.
 
 ```{r}
 
@@ -56,7 +68,7 @@ library(tidyverse)
 library(readr)
 library(ggplot2)
 
-Uncleaned_DS_jobs <- read_csv("Uncleaned_DS_jobs.csv")
+Uncleaned_DS_jobs <- read_csv("Uncleaned_DS_jobs.csv", show_col_types = F)
 ```
 
 Let's start by investigating our dataset a little bit, by getting a glimpse and see the structure of the data:
@@ -107,7 +119,7 @@ Uncleaned_DS_jobs$index <- NULL
 
 -   Rating
 
-We realized that from the summary, Rating has a minimum value as -1, but the rating should be between 0 to 5.
+We realized that from the summary, Rating has a minimum value as -1, but the rating should be between 1 to 5.
 
 We need to fix that problem.
 
@@ -132,7 +144,7 @@ summary(Uncleaned_DS_jobs$Rating)
 
 As can be seen from the summary of the rating we fix the -1 problem.
 
-Histogram of the rating variable:
+From the histogram of the rating variable below, we can see that majority of the companies receieved 4 on the rating.
 
 ```{r}
 intervals <- seq(0, 5, by = 1)
@@ -166,7 +178,7 @@ Uncleaned_DS_jobs$Founded[Uncleaned_DS_jobs$Founded == -1] <- "No information"
 summary(as.factor(Uncleaned_DS_jobs$Founded), maxsum = 6)
 ```
 
-From the summary we also fix the problem for Founded.
+From the summary we also fix the problem for Founded variable.
 
 -   Industry
 
@@ -192,7 +204,7 @@ industry_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Industry)) +
 industry_plot
 ```
 
-As can be seen from the graph it is hard to read the x axis names so to solve this problem, we picked the 10 industries that have the most frequencies in the data and draw a plot regarding these industries.
+As can be seen from the graph it is hard to read the x-axis names, so to solve this problem, we picked the 10 industries that have the most frequencies in the data and draw a plot regarding these industries.
 
 ```{r}
 top10_industries <- Uncleaned_DS_jobs %>%
@@ -209,8 +221,10 @@ plot_data$Industry <- factor(plot_data$Industry, levels = top10_industries$Indus
 filtered_data <- plot_data %>%
   filter(Industry %in% top10_industries$Industry)
 
-industry_plot_top10 <- ggplot(filtered_data, aes(x = Industry)) +
-  labs(title = "Distribution of Top 10 Industries", x = "Industry", subtitle = "") +
+industry_plot_top10 <- ggplot(filtered_data, 
+                              aes(x = Industry)) +
+  labs(title = "Distribution of Top 10 Industries", 
+       x = "Industry", subtitle = "") +
   geom_bar(colour = "darkblue", fill = "lightblue") +
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +
   theme_classic() +
@@ -219,6 +233,8 @@ industry_plot_top10 <- ggplot(filtered_data, aes(x = Industry)) +
 
 industry_plot_top10
 ```
+
+As can be seen from the graph that, top 10 industries that the companies are in; Biotech & Pharmaceuticals, IT Services, Computer Hardware & Software and so on.
 
 -   Sector
 
@@ -237,21 +253,32 @@ Uncleaned_DS_jobs$Sector[Uncleaned_DS_jobs$Sector == -1] <- "No information"
 Histogram of the Sector Variable:
 
 ```{r}
-top10_sector <- Uncleaned_DS_jobs %>%   group_by(Sector) %>%   summarise(count = n()) %>%   arrange(desc(count)) %>%   top_n(10)  
+top10_sector <- Uncleaned_DS_jobs %>%   
+  group_by(Sector) %>%   
+  summarise(count = n()) %>%   
+  arrange(desc(count)) %>%   
+  top_n(10)  
+
 # Reorder the levels of Sector based on frequency 
 plot_data <-  Uncleaned_DS_jobs
-plot_data$Sector <- factor(plot_data$Sector, levels = top10_sector$Sector)  
+plot_data$Sector <- factor(plot_data$Sector, 
+                           levels = top10_sector$Sector)  
+
 # Filter data to include only the top 10 sector 
 filtered_data <- plot_data %>%   
   filter(Sector %in% top10_sector$Sector)  
+
 Sector_plot_top10 <- ggplot(filtered_data, aes(x = Sector)) +   
   labs(title = "Distribution of Top 10 Sector", x = "Sector", subtitle = "") +    
   geom_bar(colour = "darkblue", fill = "lightblue") +  
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 2.68) +   
   theme_classic() +   
   theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1))   
+
 Sector_plot_top10
 ```
+
+Again for the sectors, similar to the industries, we had a lot of categories. So we decided to show the top 10: it can be seen that Information Technology has the highest job openings, followed by Business Services and again Biotech & Pharmaceuticals and so on.
 
 -   Revenue
 
@@ -285,6 +312,8 @@ revenue_plot<- ggplot(Uncleaned_DS_jobs, aes(x=Revenue)) +
 revenue_plot
 
 ```
+
+For the Revenue variable, from the graph it can be seen that unfortunately we had a lot of missing data. But among the non-missing ones, the highest frequency that we detected in our data set was for the companies with \$100 to \$500 million revenue.
 
 -   Company Name
 
@@ -387,6 +416,8 @@ size_plot
 
 ```
 
+Interestingly, from the plot we can see that the size of the companies in terms of employees, we see the highest frequency in 51 to 200 employees, however, other categories also have numbers close to each other.
+
 -   Competitors
 
 There are -1 values in Competitors. We don't know their competitors' name so we can attribute them to no information
@@ -400,6 +431,8 @@ Uncleaned_DS_jobs$Competitors[Uncleaned_DS_jobs$Competitors == "-1"] <- "No info
 ```{r}
 summary(as.factor(Uncleaned_DS_jobs$Competitors), maxsum = 6)
 ```
+
+For the competitor companies of the job posting companies we have a lot of different values, but the most repetitive ones could be seen from the output above.
 
 -   Location
 
@@ -469,6 +502,8 @@ locationstate_plot <- ggplot(locationstates_counts, aes(x = reorder(Location_Sta
   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
 locationstate_plot
 ```
+
+We can see that majority of the states for the job postings are from California.
 
 -   Headquarters
 
@@ -551,6 +586,8 @@ hqstate_plot <- ggplot(hqstates_counts, aes(x = reorder(Headquarters_State, n), 
 hqstate_plot
 ```
 
+We can see that majority of the states for the job postings companies' headquartes are located in California. But we can also see that some of Campanies' Headqurters are located in other countries like UK, Switzerland, France, Canada etc.
+
 -   Type Of Ownership
 
 There are -1 values in the Type of Ownership also.
@@ -588,6 +625,8 @@ tow_plot <- ggplot(Type_of_Ownership_counts, aes(x = reorder(Type_of_Ownership, 
   theme(axis.text.x = element_text(size = 9.2, angle = 45, hjust = 1))
 tow_plot
 ```
+
+We can see that majority, more than half of the companies are made up of private companies, followed by public and nonprofit organizations.
 
 -   Salary Estimation
 
@@ -677,6 +716,8 @@ head(Uncleaned_DS_jobs[c("Salary_Estimate",
                          "Low_Limit_For_Salary", 
                          "High_Limit_For_Salary")])
 ```
+
+Now we obtained two new columns as Low_Limit_For_salary and High_Limit_For_Salary for the salary estimates.
 
 -   Job Title
 
@@ -866,6 +907,8 @@ jt_plot <- ggplot(jt_counts, aes(x = reorder(Job_Title, n), y = n)) +
 jt_plot
 ```
 
+We can see that we have 455 "Data Scientist" postings, followed by 50 "Others", 47 "Data Engineers" , 47 "Data Analysts" and so on.
+
 -   Job Description
 
 When we look at the job description column,
@@ -884,7 +927,7 @@ For this we can separate the columns like SQL and we can say that this jobs want
 
 Let's start with SQL:
 
-In this we should check if SQL is mentioned in the variable Job_Description
+In this we should check if SQL is mentioned in the variable Job_Description:
 
 ```{r}
 sql_mentioned <- function(description) {
@@ -1228,7 +1271,7 @@ summary(Uncleaned_DS_jobs)
 
 ## Visualizations
 
-First, see our variables:
+First, let's see our variables:
 
 ```{r}
 glimpse(Uncleaned_DS_jobs)
@@ -1250,6 +1293,8 @@ salary_distribution <- ggplot(Uncleaned_DS_jobs, aes(x = Job_Title, y = Low_Limi
 salary_distribution
 
 ```
+
+From the plot, we can see that the medians are not really different from each other for the several Job Titles. We can see that, interestingly, "Other" type of jobs seem to have a higher median in their salaries for the low limit compared to the jobs including "Data" in their titles.
 
 ```{r}
 # Calculate median low salary limits for each job title
@@ -1279,6 +1324,10 @@ salary_distribution
 
 ```
 
+Just to be sure, we would like to check the medians in a bar graph anyway. From the graph, as we suggested earlier, we can see that "Other" job titles indeed have a higher median in their pays with 100K.
+
+Let's examine the High Limit Estimate for Salary:
+
 -   High Limit Estimate for Salary
 
 ```{r}
@@ -1292,6 +1341,22 @@ salary_distribution_high <- ggplot(Uncleaned_DS_jobs, aes(x = Job_Title, y = Hig
 
 salary_distribution_high
 ```
+
+From the box plot of the pays, as may be expected, "Data Science and Analytics Managers" have the highest median in pay compared to the other job titles. But we can see that we also have outliers in both managers, as well as other jobs too. Let's see them just out of curiosity:
+
+```{r}
+# Arrange the data by 'Job_Title' and 'Salary' in descending order
+sorted_data <- Uncleaned_DS_jobs %>% dplyr::arrange(Job_Title, desc(High_Limit_For_Salary))
+
+# Filter to keep the rows with the highest salary for each job title
+highest_salary_rows <- sorted_data %>% group_by(Job_Title) %>% slice(1)
+
+# Print the filtered rows
+highest_salary_rows |> select(Job_Title, Salary_Estimate,Company_Name)
+
+```
+
+Here we can see the highest salary range for each of the job titles.
 
 ```{r}
 # Calculate median low salary limits for each job title
@@ -1320,7 +1385,7 @@ salary_distribution
 
 ```
 
-As can be seen from the graph that there is not a significant difference between the medians of the different job titles.
+As can be seen from the medians graph that there is not a significant difference between the medians of the different job titles but Data Science and Analytics Managers have the highest median pay with 147K.
 
 -   **Company Size vs. Salaries:** To explore how salary ranges vary across different company sizes:
 
@@ -1353,6 +1418,8 @@ As can be seen from the graph that there is not a significant difference between
     plot_low
     plot_high
     ```
+
+From the boxplot of the High and Low Limit Ranges for the salaries versus company sizes, we can see that 5001 to 10000 employes have the highest median in the high limit salary ranges.
 
 -   **Job Titles vs. Senior Positions:** Visualize the proportion of senior positions against different job titles using a bar chart:
 
@@ -1410,7 +1477,7 @@ treemap_plot <- treemap(job_count_by_industry, index = "Industry", vSize = "Job_
 
 We can see that the industries that are hiring the most are: Biotech & Pharmaceuticals, IT Services, Computer Hardware & Software, Aerospace & Defense and so on.
 
--   Revenue vs. Ratings: Create a grouped boxplot to show the distribution of ratings for different revenue categories
+-   Revenue vs. Ratings: Create a grouped boxplot to show the distribution of ratings for different revenue categories.
 
 ```{r}
 boxplot <- ggplot(Uncleaned_DS_jobs, 
@@ -1427,33 +1494,38 @@ boxplot <- ggplot(Uncleaned_DS_jobs,
 boxplot
 ```
 
+From the plot we can see that highest median rating for the companies according to their revenues was for the companies with \$25 to \$50 million (USD).
+
 -   Overview of Skills Needed in the Job Postings:
 
-    ```{r}
-    skills_df <- Uncleaned_DS_jobs[, c("sql_needed", "python_needed", "numpy_needed", "stat_needed","excel_needed","hadoop_needed","spark_needed",
-                        "aws_needed","tableau_needed","bigdata_needed","ML_needed","DL_needed")]
+```{r}
+skills_df <- Uncleaned_DS_jobs[, c("sql_needed", "python_needed", "numpy_needed", "stat_needed","excel_needed","hadoop_needed","spark_needed",
+                    "aws_needed","tableau_needed","bigdata_needed","ML_needed","DL_needed")]
 
-    skills_long <- tidyr::gather(skills_df, key = "Skill", value = "Needed")
+skills_long <- tidyr::gather(skills_df, key = "Skill", value = "Needed")
 
 
-    my_colors <- c("lightblue", "darkblue")
+my_colors <- c("lightblue", "darkblue")
 
-    skills_long$Needed <- factor(skills_long$Needed, levels = c("0", "1"))
+skills_long$Needed <- factor(skills_long$Needed, levels = c("0", "1"))
 
-    skills_plot <- ggplot(skills_long, aes(x = Skill, fill = Needed)) +
-      geom_bar(position = "dodge", width = 0.7) +
-      scale_fill_manual(values = my_colors) + 
-      labs(title = "Overview of Skills Needed",
-           x = "Skill",
-           y = "Count") +
-      theme_classic() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+skills_plot <- ggplot(skills_long, aes(x = Skill, fill = Needed)) +
+  geom_bar(position = "dodge", width = 0.7) +
+  scale_fill_manual(values = my_colors) + 
+  labs(title = "Overview of Skills Needed",
+       x = "Skill",
+       y = "Count") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-    skills_plot
-
-    ```
+skills_plot
+```
 
 As can be seen from the graph that python and ML are most mentioned skills that are required in the job postings.
+
+## Conclusion
+
+In conclusion, for this data handling and visaulization project, we use the data from Kaggle named "Data Science Job Posting on Glassdoor". This data set is originally obtained from Glassdoor website by using web scrapping. We started our analysis by data cleaning. We tidied the columns by separating the columns that requiring more than one information. We grouped job titles by their similarities and we obtained new variables from them. At start, we had a total of 672 rows with 15 columns but at the end, we managed to have 31 columns from all the information we have found within the data set. As for findings, when we investigate the lower limit of salaries for the job postings, we saw that "Other" job titles, meaning jobs that does not have "data" in their titles at all, jobs like scientist, researcher etc. have a higher median in their pays with 100K. However, for the high limit for the salaries are investigated, as may be expected, "Data Science and Analytics Managers" have found to be the highest median in pay compared to the other job titles. When we examine High and Low Limit Ranges for the salaries versus company sizes, we can see that 5001 to 10000 employes have the highest median in the high limit salary ranges. Among the jobs postings 21% of the Data Analyst positions are found as senior position. We saw that the industries that are hiring the most are: Biotech & Pharmaceuticals, IT Services, Computer Hardware & Software, Aerospace & Defense and so on. Futhermore, highest median rating for the companies according to their revenues was for the companies with \$25 to \$50 million (USD). Finally, Python and ML are most mentioned skills that are required in the job postings.
 
 ## References
 
